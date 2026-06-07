@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/app_spacing.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/responsive.dart';
 import 'package:jonathan_oishi_portfolio/core/theme/app_colors_theme.dart';
+import 'package:jonathan_oishi_portfolio/features/view/widgets/particles/particles_back.dart';
 
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
@@ -15,61 +16,71 @@ class HeroSection extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: AppColors.background,
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: metrics.contentMaxWidth),
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(
-              horizontal: metrics.horizontalPadding,
-              vertical: metrics.verticalPadding,
-            ),
-            child: Responsive.responsive<Widget>(
-              context: context,
-              mobile: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _HeroTextContent(),
-                  SizedBox(height: AppSpacing.xl),
-                  Center(child: _HeroPhoto()),
-                ],
+      child: Stack(
+        children: [
+          const Positioned.fill(
+            child: ParticleBackground(),
+          ),
+
+          Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: metrics.contentMaxWidth,
               ),
-              tablet: Row(
-                children: [
-                  Expanded(
-                    flex: 12,
-                    child: const _HeroTextContent(),
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(
+                  horizontal: metrics.horizontalPadding,
+                  vertical: metrics.verticalPadding,
+                ),
+                child: Responsive.responsive<Widget>(
+                  context: context,
+                  mobile: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _HeroTextContent(),
+                      SizedBox(height: AppSpacing.xl),
+                      Center(child: _HeroPhoto()),
+                    ],
                   ),
-                  SizedBox(width: metrics.contentGap),
-                  Expanded(
-                    flex: 9,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: const _HeroPhoto(),
-                    ),
+                  tablet: Row(
+                    children: [
+                      Expanded(
+                        flex: 12,
+                        child: const _HeroTextContent(),
+                      ),
+                      SizedBox(width: metrics.contentGap),
+                      Expanded(
+                        flex: 9,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: const _HeroPhoto(),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              desktop: Row(
-                children: [
-                  const Expanded(
-                    flex: 11,
-                    child: _HeroTextContent(),
+                  desktop: Row(
+                    children: [
+                      const Expanded(
+                        flex: 11,
+                        child: _HeroTextContent(),
+                      ),
+                      SizedBox(width: metrics.contentGap),
+                      const Expanded(
+                        flex: 9,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: _HeroPhoto(),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: metrics.contentGap),
-                  const Expanded(
-                    flex: 9,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: _HeroPhoto(),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -284,7 +295,7 @@ class _HeroPhoto extends StatelessWidget {
             ),
           ),
           Image.asset(
-            'assets/photo/jonathan_oishi.png',
+            'assets/logo_flutter.png',
             fit: BoxFit.contain,
           ),
         ],

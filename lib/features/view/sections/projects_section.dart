@@ -157,18 +157,7 @@ class _ProjectsGrid extends StatelessWidget {
         title: 'OneTasks',
         description:
             'Gerenciamento de tarefas com gamificacao e notificacoes inteligentes.',
-      ),
-      _ProjectCard(
-        tag: 'MVVM',
-        title: 'VacitAP Search',
-        description:
-            'Busca de vacinacao inteligente API REST com arquitetura MVVM.',
-      ),
-      _ProjectCard(
-        tag: 'FIREBASE',
-        title: 'Workout Tracker',
-        description:
-            'Monitoramento de treinos com Firebase e painel de evolucao.',
+        imageLink: 'assets/my_financy.png',
       ),
     ];
 
@@ -209,11 +198,13 @@ class _ProjectCard extends StatelessWidget {
     required this.tag,
     required this.title,
     required this.description,
+    required this.imageLink,
   });
 
   final String tag;
   final String title;
   final String description;
+  final String imageLink;
 
   @override
   Widget build(BuildContext context) {
@@ -228,27 +219,17 @@ class _ProjectCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 170,
+            height: 200,
             child: Stack(
               fit: StackFit.expand,
               children: [
                 DecoratedBox(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.rail,
-                        AppColors.primary.withOpacity(0.25),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+                    borderRadius: BorderRadius.circular(20),
+                    image: DecorationImage(
+                      image: AssetImage(imageLink),
+                      fit: BoxFit.cover,
                     ),
-                  ),
-                ),
-                const Center(
-                  child: Icon(
-                    Icons.smartphone,
-                    size: 54,
-                    color: AppColors.primary,
                   ),
                 ),
               ],
@@ -265,7 +246,7 @@ class _ProjectCard extends StatelessWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.16),
+                    color: AppColors.primary.withValues(alpha: 0.32),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(

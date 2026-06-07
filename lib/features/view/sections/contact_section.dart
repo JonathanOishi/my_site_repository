@@ -162,7 +162,7 @@ class _ContactInfoCard extends StatelessWidget {
                 child: _InfoChip(
                   icon: Icons.alternate_email,
                   title: 'EMAIL',
-                  value: 'jonathan.oishi@dev.com',
+                  value: 'jonathan_oishi@hotmail.com',
                 ),
               ),
               SizedBox(width: AppSpacing.md),
@@ -170,7 +170,7 @@ class _ContactInfoCard extends StatelessWidget {
                 child: _InfoChip(
                   icon: Icons.location_on_outlined,
                   title: 'LOCALIDADE',
-                  value: 'Pernambuco/BR',
+                  value: 'São Paulo/SP',
                 ),
               ),
             ],
@@ -181,7 +181,7 @@ class _ContactInfoCard extends StatelessWidget {
                 child: _InfoChip(
                   icon: Icons.alternate_email,
                   title: 'EMAIL',
-                  value: 'jonathan.oishi@dev.com',
+                  value: 'jonathan_oishi@hotmail.com',
                 ),
               ),
               SizedBox(width: AppSpacing.md),
@@ -189,7 +189,7 @@ class _ContactInfoCard extends StatelessWidget {
                 child: _InfoChip(
                   icon: Icons.location_on_outlined,
                   title: 'LOCALIDADE',
-                  value: 'Pernambuco/BR',
+                  value: 'São Paulo/SP',
                 ),
               ),
             ],

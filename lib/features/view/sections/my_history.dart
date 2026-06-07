@@ -109,7 +109,7 @@ class _MyHistoryContent extends StatelessWidget {
         ConstrainedBox(
           constraints: BoxConstraints(maxWidth: metrics.textWidth),
           child: Text(
-            'Sou um desenvolvedor apaixonado pela arte de criar softwares que impactam positivamente a vida das pessoas. Com foco total no ecossistema Mobile, dedico meus dias a dominar o Flutter e suas melhores praticas.',
+            'Formado em Análise e Desenvolvimento de Sistemas e pós-graduando em Desenvolvimento Mobile Android e Multiplataforma, sou desenvolvedor focado em Flutter, Firebase, Provider e arquitetura MVVM. Tenho paixão por criar aplicações modernas, escaláveis e com excelente experiência para o usuário, sempre buscando evolução contínua através de novos projetos e tecnologias.',
             style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: metrics.bodySize,
@@ -223,7 +223,9 @@ class _AvatarCircle extends StatelessWidget {
             height: ringSize,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.primary.withOpacity(0.32)),
+              border: Border.all(
+                color: AppColors.primary.withValues(alpha: 0.32),
+              ),
             ),
           ),
           Container(
@@ -233,7 +235,7 @@ class _AvatarCircle extends StatelessWidget {
               shape: BoxShape.circle,
               gradient: RadialGradient(
                 colors: [
-                  AppColors.primary.withOpacity(0.24),
+                  AppColors.primary.withValues(alpha: 0.32),
                   AppColors.background,
                 ],
               ),
@@ -244,9 +246,11 @@ class _AvatarCircle extends StatelessWidget {
             height: imageSize,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.primary.withOpacity(0.55)),
+              border: Border.all(
+                color: AppColors.primary.withValues(alpha: .55),
+              ),
               image: const DecorationImage(
-                image: AssetImage('assets/photo/jonathan_oishi.png'),
+                image: AssetImage('assets/jonathan_oishi.png'),
                 fit: BoxFit.cover,
                 alignment: Alignment.topCenter,
               ),
