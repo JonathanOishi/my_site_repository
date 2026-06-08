@@ -97,7 +97,7 @@ class _HeroTextContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'AVAILABLE FOR NEW PROJECTS',
+          'DISPONÍVEL PARA NOVOS PROJETOS',
           style: TextStyle(
             color: AppColors.primary,
             fontSize: metrics.labelFontSize,

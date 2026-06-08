@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
             ),
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.stack],
-              child: const TechStackSection(),
+              child: const TechGrid(),
             ),
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.experience],
