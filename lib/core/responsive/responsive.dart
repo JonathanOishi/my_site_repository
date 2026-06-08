@@ -66,4 +66,21 @@ class Responsive {
         return desktop;
     }
   }
+
+  static double navBarHeight(BuildContext context) {
+    return isMobile(context) ? 64 : 80;
+  }
+
+  static double heroHeight(BuildContext context) {
+    return height(context) - navBarHeight(context);
+  }
+
+  static double maxContentWidth(BuildContext context) {
+    return responsive(
+      context: context,
+      mobile: 600,
+      tablet: 980,
+      desktop: 1240,
+    );
+  }
 }

@@ -11,10 +11,9 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final metrics = _HeroMetrics.fromContext(context);
-
     return Container(
       width: double.infinity,
+      height: Responsive.heroHeight(context),
       color: AppColors.background,
       child: Stack(
         children: [
@@ -23,60 +22,33 @@ class HeroSection extends StatelessWidget {
           ),
 
           Align(
-            alignment: Alignment.topCenter,
+            alignment: Alignment.center,
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                maxWidth: metrics.contentMaxWidth,
+                maxWidth: Responsive.maxContentWidth(context),
               ),
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(
-                  horizontal: metrics.horizontalPadding,
-                  vertical: metrics.verticalPadding,
-                ),
-                child: Responsive.responsive<Widget>(
-                  context: context,
-                  mobile: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _HeroTextContent(),
-                      SizedBox(height: AppSpacing.xl),
-                      Center(child: _HeroPhoto()),
-                    ],
-                  ),
-                  tablet: Row(
-                    children: [
-                      Expanded(
-                        flex: 12,
-                        child: const _HeroTextContent(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Responsive.isMobile(context)
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _HeroTextContent(),
+                          SizedBox(height: 40),
+                          _HeroPhoto(),
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          Expanded(
+                            child: _HeroTextContent(),
+                          ),
+                          SizedBox(width: 48),
+                          Expanded(
+                            child: _HeroPhoto(),
+                          ),
+                        ],
                       ),
-                      SizedBox(width: metrics.contentGap),
-                      Expanded(
-                        flex: 9,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: const _HeroPhoto(),
-                        ),
-                      ),
-                    ],
-                  ),
-                  desktop: Row(
-                    children: [
-                      const Expanded(
-                        flex: 11,
-                        child: _HeroTextContent(),
-                      ),
-                      SizedBox(width: metrics.contentGap),
-                      const Expanded(
-                        flex: 9,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: _HeroPhoto(),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ),
             ),
           ),
@@ -93,177 +65,82 @@ class _HeroTextContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final metrics = _HeroMetrics.fromContext(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'DISPONÍVEL PARA NOVOS PROJETOS',
-          style: TextStyle(
-            color: AppColors.primary,
-            fontSize: metrics.labelFontSize,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 1.8,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        Text.rich(
-          TextSpan(
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: Responsive.isMobile(context)
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.start,
+        children: [
+          Text(
+            'DISPONÍVEL PARA NOVOS PROJETOS',
             style: TextStyle(
-              height: 1.03,
-              fontSize: metrics.titleFontSize,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
-            ),
-            children: const [
-              TextSpan(text: 'DESENVOLVEDOR\n'),
-              TextSpan(
-                text: 'FLUTTER',
-                style: TextStyle(color: AppColors.primary),
-              ),
-              TextSpan(text: ' & MOBILE'),
-            ],
-          ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: metrics.textMaxWidth),
-          child: Text(
-            'Transformando ideias complexas em experiências mobile refinadas. Especialista em ecossistema Flutter, Dart e integração robusta com Firebase.',
-            style: TextStyle(
-              height: 1.55,
-              fontSize: metrics.subtitleFontSize,
-              color: AppColors.textSecondary,
+              color: AppColors.primary,
+              fontSize: metrics.labelFontSize,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.8,
             ),
           ),
-        ),
-        const SizedBox(height: AppSpacing.xl),
-        Responsive.responsive<Widget>(
-          context: context,
-          mobile: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.textPrimary,
-                    elevation: 0,
-                    minimumSize: const Size(0, 52),
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: const Text(
-                    'Ver Projetos',
-                    style: TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                ),
+
+          const SizedBox(height: AppSpacing.lg),
+
+          Text.rich(
+            TextSpan(
+              style: TextStyle(
+                height: 1.03,
+                fontSize: metrics.titleFontSize,
+                fontWeight: FontWeight.w800,
+                color: AppColors.textPrimary,
               ),
-              const SizedBox(height: AppSpacing.md),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(0, 52),
-                    foregroundColor: AppColors.textPrimary,
-                    side: const BorderSide(color: AppColors.border),
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: const Text(
-                    'Baixar Currículo',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
+              children: const [
+                TextSpan(text: 'DESENVOLVEDOR\n'),
+                TextSpan(
+                  text: 'FLUTTER',
+                  style: TextStyle(color: AppColors.primary),
                 ),
-              ),
-            ],
+                TextSpan(text: ' & MOBILE'),
+              ],
+            ),
+            textAlign: Responsive.isMobile(context)
+                ? TextAlign.center
+                : TextAlign.start,
           ),
-          tablet: Wrap(
-            spacing: AppSpacing.md,
-            runSpacing: AppSpacing.md,
+
+          const SizedBox(height: AppSpacing.lg),
+
+          SizedBox(
+            width: metrics.textMaxWidth,
+            child: Text(
+              'Transformando ideias complexas em experiências mobile refinadas. Especialista em ecossistema Flutter, Dart e integração robusta com Firebase.',
+              textAlign: Responsive.isMobile(context)
+                  ? TextAlign.center
+                  : TextAlign.start,
+              style: TextStyle(
+                height: 1.55,
+                fontSize: metrics.subtitleFontSize,
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ),
+
+          const SizedBox(height: AppSpacing.xl),
+
+          Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.textPrimary,
-                  elevation: 0,
-                  minimumSize: Size(metrics.primaryButtonWidth, 54),
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
                 onPressed: () {},
-                child: const Text(
-                  'Ver Projetos',
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
+                child: const Text('Ver Projetos'),
               ),
+              const SizedBox(width: 16),
               OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  minimumSize: Size(metrics.secondaryButtonWidth, 54),
-                  foregroundColor: AppColors.textPrimary,
-                  side: const BorderSide(color: AppColors.border),
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
                 onPressed: () {},
-                child: const Text(
-                  'Baixar Currículo',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
+                child: const Text('Baixar Currículo'),
               ),
             ],
           ),
-          desktop: Wrap(
-            spacing: AppSpacing.md,
-            runSpacing: AppSpacing.md,
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.textPrimary,
-                  elevation: 0,
-                  minimumSize: Size(metrics.primaryButtonWidth, 54),
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-                onPressed: () {},
-                child: const Text(
-                  'Ver Projetos',
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
-              ),
-              OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  minimumSize: Size(metrics.secondaryButtonWidth, 54),
-                  foregroundColor: AppColors.textPrimary,
-                  side: const BorderSide(color: AppColors.border),
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-                onPressed: () {},
-                child: const Text(
-                  'Baixar Currículo',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
