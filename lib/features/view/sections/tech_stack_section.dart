@@ -69,9 +69,7 @@ class TechGrid extends StatelessWidget {
       color: AppColors.background,
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: 1240,
-          ),
+          constraints: const BoxConstraints(maxWidth: 1240),
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 24,
@@ -94,15 +92,11 @@ class TechGrid extends StatelessWidget {
                     children: const [
                       TextSpan(
                         text: 'Stack ',
-                        style: TextStyle(
-                          color: AppColors.textPrimary,
-                        ),
+                        style: TextStyle(color: AppColors.textPrimary),
                       ),
                       TextSpan(
                         text: 'Tecnológica',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                        ),
+                        style: TextStyle(color: AppColors.primary),
                       ),
                     ],
                   ),
@@ -139,9 +133,11 @@ class TechGrid extends StatelessWidget {
                     ),
                     crossAxisSpacing: 24,
                     mainAxisSpacing: 24,
+
+                    // 🔥 FIX PRINCIPAL (evita corte no iPhone/Safari)
                     childAspectRatio: Responsive.responsive(
                       context: context,
-                      mobile: 1.35,
+                      mobile: 1.05,
                       tablet: 1.15,
                       desktop: 1.15,
                     ),
@@ -154,31 +150,40 @@ class TechGrid extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: AppColors.surfaceAlt,
                         borderRadius: BorderRadius.circular(18),
-                        border: Border.all(
-                          color: AppColors.border,
-                        ),
+                        border: Border.all(color: AppColors.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            category['title'] as String,
-                            style: const TextStyle(
-                              color: AppColors.primary,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w700,
+                          // 🔥 título protegido contra overflow
+                          SizedBox(
+                            height: 54,
+                            child: Text(
+                              category['title'] as String,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: AppColors.primary,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                height: 1.2,
+                              ),
                             ),
                           ),
-                          const SizedBox(height: 24),
+
+                          const SizedBox(height: 18),
+
                           Expanded(
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 ...(category['skills'] as List).map(
-                                  (skill) => _SkillItem(
-                                    icon: skill.$1 as IconData,
-                                    name: skill.$2 as String,
-                                    percentage: skill.$3 as int,
+                                  (skill) => Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: _SkillItem(
+                                      icon: skill.$1 as IconData,
+                                      name: skill.$2 as String,
+                                      percentage: skill.$3 as int,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -226,7 +231,6 @@ class _SkillItem extends StatelessWidget {
             color: AppColors.primary,
           ),
         ),
-
         const SizedBox(width: 12),
 
         Expanded(
@@ -235,13 +239,14 @@ class _SkillItem extends StatelessWidget {
             children: [
               Text(
                 name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-
               const SizedBox(height: 6),
 
               Row(
@@ -259,7 +264,6 @@ class _SkillItem extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(width: 10),
 
                   SizedBox(
