@@ -64,7 +64,7 @@ class ExperienceSection extends StatelessWidget {
 
                 const _TimelineNode(
                   side: _TimelineSide.right,
-                  period: '2024 - 2025',
+                  period: '2023 - Atual',
                   title: 'Desenhista / Projetista',
                   description:
                       'Atuo na Sampel como desenhista/projetista, sendo responsável pelo desenvolvimento de produtos, coquilhas e dispositivos. Realizo a criação e detalhamento de desenhos técnicos, apoiando a engenharia na concepção de soluções e garantindo precisão e viabilidade para fabricação e produção.',
@@ -75,8 +75,8 @@ class ExperienceSection extends StatelessWidget {
 
                 const _TimelineNode(
                   side: _TimelineSide.left,
-                  period: 'INICIO ATUAL',
-                  title: 'Objetibo: Dev Flutter Junior',
+                  period: 'META ATUAL',
+                  title: 'Objetivo: Dev Flutter Junior',
                   description:
                       'Meu objetivo é atuar como desenvolvedor Flutter júnior, aprimorando minhas habilidades na criação de aplicativos móveis com foco em desempenho, boas práticas e interfaces intuitivas. Busco crescer profissionalmente na área de desenvolvimento mobile, contribuindo com projetos reais e evoluindo continuamente em tecnologias como Flutter.',
                   isCurrent: true,
