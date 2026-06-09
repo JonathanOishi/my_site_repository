@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/app_spacing.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/responsive.dart';
@@ -46,102 +47,62 @@ class ProjectsSection extends StatelessWidget {
               children: [
                 Responsive.responsive<Widget>(
                   context: context,
-                  mobile: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text.rich(
-                        TextSpan(
-                          style: TextStyle(
-                            fontSize: titleSize,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.textPrimary,
-                          ),
-                          children: const [
-                            TextSpan(text: 'Projetos em '),
-                            TextSpan(
-                              text: 'Destaque',
-                              style: TextStyle(color: AppColors.primary),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.xs),
-                      const Text(
-                        'VER TODO CATALOGO',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                  tablet: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text.rich(
-                        TextSpan(
-                          style: TextStyle(
-                            fontSize: titleSize,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.textPrimary,
-                          ),
-                          children: const [
-                            TextSpan(text: 'Projetos em '),
-                            TextSpan(
-                              text: 'Destaque',
-                              style: TextStyle(color: AppColors.primary),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Text(
-                        'Ver todo catalogo',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                  desktop: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text.rich(
-                        TextSpan(
-                          style: TextStyle(
-                            fontSize: titleSize,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.textPrimary,
-                          ),
-                          children: const [
-                            TextSpan(text: 'Projetos em '),
-                            TextSpan(
-                              text: 'Destaque',
-                              style: TextStyle(color: AppColors.primary),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Text(
-                        'Ver todo catalogo',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
+                  mobile: _buildHeader(titleSize, isMobile: true),
+                  tablet: _buildHeader(titleSize),
+                  desktop: _buildHeader(titleSize),
                 ),
+
                 const SizedBox(height: AppSpacing.xl),
+
                 const _ProjectsGrid(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildHeader(double titleSize, {bool isMobile = false}) {
+    final title = Text.rich(
+      TextSpan(
+        style: TextStyle(
+          fontSize: titleSize,
+          fontWeight: FontWeight.w800,
+          color: AppColors.textPrimary,
+        ),
+        children: const [
+          TextSpan(text: 'Projetos em '),
+          TextSpan(
+            text: 'Destaque',
+            style: TextStyle(color: AppColors.primary),
+          ),
+        ],
+      ),
+    );
+
+    final link = Text(
+      isMobile ? 'VER TODO CATÁLOGO' : 'Ver todo catálogo',
+      style: const TextStyle(
+        color: AppColors.primary,
+        fontWeight: FontWeight.w600,
+      ),
+    );
+
+    if (isMobile) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          title,
+          const SizedBox(height: 6),
+          link,
+        ],
+      );
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [title, link],
     );
   }
 }
@@ -156,25 +117,42 @@ class _ProjectsGrid extends StatelessWidget {
         tag: 'FLUTTER',
         title: 'OneTasks',
         description:
-            'Gerenciamento de tarefas com gamificacao e notificacoes inteligentes.',
+            'Gerenciamento de tarefas com gamificação e notificações inteligentes.',
+        imageLink: 'assets/my_financy.png',
+      ),
+      _ProjectCard(
+        tag: 'FINTECH',
+        title: 'Finance App',
+        description: 'Controle financeiro moderno e minimalista.',
         imageLink: 'assets/my_financy.png',
       ),
     ];
 
+    final isMobile = Responsive.isMobile(context);
+
+    /// 📱 MOBILE = CAROUSEL (Apple App Store style)
+    if (isMobile) {
+      return SizedBox(
+        height: 520,
+        child: PageView.builder(
+          controller: PageController(viewportFraction: 0.88),
+          itemCount: cards.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: cards[index],
+            );
+          },
+        ),
+      );
+    }
+
+    /// 💻 TABLET / DESKTOP = GRID
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isMobile = Responsive.isMobile(context);
         final isDesktop = constraints.maxWidth >= 1000;
-        final crossCount = isDesktop
-            ? 3
-            : isMobile
-            ? 1
-            : 2;
-        final ratio = isDesktop
-            ? 0.84
-            : isMobile
-            ? 0.95
-            : 0.92;
+
+        final crossCount = isDesktop ? 3 : 2;
 
         return GridView.builder(
           shrinkWrap: true,
@@ -184,7 +162,7 @@ class _ProjectsGrid extends StatelessWidget {
             crossAxisCount: crossCount,
             crossAxisSpacing: AppSpacing.md,
             mainAxisSpacing: AppSpacing.md,
-            childAspectRatio: ratio,
+            mainAxisExtent: 520,
           ),
           itemBuilder: (context, index) => cards[index],
         );
@@ -193,7 +171,7 @@ class _ProjectsGrid extends StatelessWidget {
   }
 }
 
-class _ProjectCard extends StatelessWidget {
+class _ProjectCard extends StatefulWidget {
   const _ProjectCard({
     required this.tag,
     required this.title,
@@ -207,103 +185,138 @@ class _ProjectCard extends StatelessWidget {
   final String imageLink;
 
   @override
+  State<_ProjectCard> createState() => _ProjectCardState();
+}
+
+class _ProjectCardState extends State<_ProjectCard> {
+  bool isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surfaceAlt,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.border),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 200,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                      image: AssetImage(imageLink),
-                      fit: BoxFit.cover,
+    final isWeb = kIsWeb;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+        transform: (isWeb && isHovered)
+            ? (Matrix4.identity()..scale(1.02))
+            : Matrix4.identity(),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceAlt,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.border),
+          boxShadow: (isWeb && isHovered)
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.25),
+                    blurRadius: 25,
+                    offset: const Offset(0, 12),
+                  )
+                ]
+              : [],
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// IMAGE HERO (Apple style)
+            AspectRatio(
+              aspectRatio: 16 / 10,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(
+                    widget.imageLink,
+                    fit: BoxFit.cover,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Colors.black.withValues(alpha: 0.25),
+                          Colors.transparent,
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
+
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      widget.tag,
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.32),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    tag,
+
+                  const SizedBox(height: AppSpacing.sm),
+
+                  Text(
+                    widget.title,
                     style: const TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.textPrimary,
                     ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
+
+                  const SizedBox(height: AppSpacing.sm),
+
+                  Text(
+                    widget.description,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.textSecondary,
+                      height: 1.4,
+                    ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  description,
-                  style: const TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 12,
-                    height: 1.4,
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.md),
-                Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: AppColors.textPrimary,
-                        minimumSize: const Size(96, 36),
+
+                  const SizedBox(height: AppSpacing.md),
+
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                        ),
+                        child: const Text("Preview"),
                       ),
-                      child: const Text('Preview'),
-                    ),
-                    const SizedBox(width: AppSpacing.sm),
-                    OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(84, 36),
-                        side: const BorderSide(color: AppColors.border),
-                        foregroundColor: AppColors.textPrimary,
+                      const SizedBox(width: 10),
+                      OutlinedButton(
+                        onPressed: () {},
+                        child: const Text("Código"),
                       ),
-                      child: const Text('Codigo'),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
