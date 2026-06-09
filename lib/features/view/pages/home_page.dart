@@ -57,12 +57,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // Pegamos os paddings de segurança do dispositivo atual
+    final systemPadding = MediaQuery.of(context).padding;
+
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.background,
       resizeToAvoidBottomInset: false,
-      // Se estivesse usando um SafeArea aqui ao redor do body, as bordas brancas voltariam.
-      // Do jeito que está (direto o SingleChildScrollView), o Flutter Web pode ocupar 100% da tela.
       drawer: MobileNavDrawer(
         items: homeNavItems,
         onItemTap: _onDrawerItemTap,
@@ -70,6 +71,13 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            // 1. ESPAÇAMENTO DO TOPO: Cria uma barreira segura da cor do fundo do app para empurrar a Navbar para baixo do relógio do iPhone
+            Container(
+              height: systemPadding.top,
+              color: AppColors
+                  .background, // Usa a mesma cor da Navbar/Fundo para ficar invisível
+            ),
+
             Navbar(
               items: homeNavItems,
               onItemTap: _scrollToSection,
@@ -109,8 +117,14 @@ class _HomePageState extends State<HomePage> {
             ),
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.footer],
-              child:
-                  const FooterSection(), // <-- Este cara já tem o bottom padding dinâmico que criamos!
+              child: const FooterSection(),
+            ),
+
+            // 2. ESPAÇAMENTO DO RODAPÉ: Se o celular tiver aquela barra inferior de fechar apps, cria um bloco protetor embaixo do Footer
+            Container(
+              height: systemPadding.bottom,
+              color: AppColors
+                  .background, // Cor idêntica ao fundo do seu FooterSection
             ),
           ],
         ),
