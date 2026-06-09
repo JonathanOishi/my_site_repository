@@ -65,9 +65,9 @@ class ExperienceSection extends StatelessWidget {
                 const _TimelineNode(
                   side: _TimelineSide.right,
                   period: '2024 - 2025',
-                  title: 'Arquiteto Desenvolvedor\nSênior',
+                  title: 'Desenhista / Projetista',
                   description:
-                      'Atuacao no planejamento de modulo interno e decisao de arquitetura corporativa.',
+                      'Atuo na Sampel como desenhista/projetista, sendo responsável pelo desenvolvimento de produtos, coquilhas e dispositivos. Realizo a criação e detalhamento de desenhos técnicos, apoiando a engenharia na concepção de soluções e garantindo precisão e viabilidade para fabricação e produção.',
                   isCurrent: false,
                 ),
 
@@ -76,9 +76,9 @@ class ExperienceSection extends StatelessWidget {
                 const _TimelineNode(
                   side: _TimelineSide.left,
                   period: 'INICIO ATUAL',
-                  title: 'Objective: Dev Flutter Junior',
+                  title: 'Objetibo: Dev Flutter Junior',
                   description:
-                      'Desenvolvimento orientado a performance e valor para produtos digitais.',
+                      'Meu objetivo é atuar como desenvolvedor Flutter júnior, aprimorando minhas habilidades na criação de aplicativos móveis com foco em desempenho, boas práticas e interfaces intuitivas. Busco crescer profissionalmente na área de desenvolvimento mobile, contribuindo com projetos reais e evoluindo continuamente em tecnologias como Flutter.',
                   isCurrent: true,
                 ),
               ],
