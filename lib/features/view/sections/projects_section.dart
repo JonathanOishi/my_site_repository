@@ -45,15 +45,8 @@ class ProjectsSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Responsive.responsive<Widget>(
-                  context: context,
-                  mobile: _buildHeader(titleSize, isMobile: true),
-                  tablet: _buildHeader(titleSize),
-                  desktop: _buildHeader(titleSize),
-                ),
-
+                _buildHeader(context, titleSize),
                 const SizedBox(height: AppSpacing.xl),
-
                 const _ProjectsGrid(),
               ],
             ),
@@ -63,7 +56,9 @@ class ProjectsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(double titleSize, {bool isMobile = false}) {
+  Widget _buildHeader(BuildContext context, double titleSize) {
+    final isMobile = Responsive.isMobile(context);
+
     final title = Text.rich(
       TextSpan(
         style: TextStyle(
@@ -130,10 +125,10 @@ class _ProjectsGrid extends StatelessWidget {
 
     final isMobile = Responsive.isMobile(context);
 
-    /// 📱 MOBILE = CAROUSEL (Apple App Store style)
+    // 📱 MOBILE → SWIPE CAROUSEL
     if (isMobile) {
       return SizedBox(
-        height: 520,
+        height: 560,
         child: PageView.builder(
           controller: PageController(viewportFraction: 0.88),
           itemCount: cards.length,
@@ -147,19 +142,17 @@ class _ProjectsGrid extends StatelessWidget {
       );
     }
 
-    /// 💻 TABLET / DESKTOP = GRID
+    // 💻 TABLET / DESKTOP → GRID
     return LayoutBuilder(
       builder: (context, constraints) {
         final isDesktop = constraints.maxWidth >= 1000;
-
-        final crossCount = isDesktop ? 3 : 2;
 
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: cards.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossCount,
+            crossAxisCount: isDesktop ? 3 : 2,
             crossAxisSpacing: AppSpacing.md,
             mainAxisSpacing: AppSpacing.md,
             mainAxisExtent: 520,
@@ -220,99 +213,89 @@ class _ProjectCardState extends State<_ProjectCard> {
         ),
         clipBehavior: Clip.antiAlias,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// IMAGE HERO (Apple style)
+            // 🖼 IMAGE
             AspectRatio(
               aspectRatio: 16 / 10,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.asset(
-                    widget.imageLink,
-                    fit: BoxFit.cover,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          Colors.black.withValues(alpha: 0.25),
-                          Colors.transparent,
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              child: Image.asset(
+                widget.imageLink,
+                fit: BoxFit.cover,
               ),
             ),
 
-            Padding(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      widget.tag,
-                      style: const TextStyle(
-                        color: AppColors.primary,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
+            // 📦 CONTENT CENTRALIZADO
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // TAG
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
                       ),
-                    ),
-                  ),
-
-                  const SizedBox(height: AppSpacing.sm),
-
-                  Text(
-                    widget.title,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-
-                  const SizedBox(height: AppSpacing.sm),
-
-                  Text(
-                    widget.description,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: AppColors.textSecondary,
-                      height: 1.4,
-                    ),
-                  ),
-
-                  const SizedBox(height: AppSpacing.md),
-
-                  Row(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        widget.tag,
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
                         ),
-                        child: const Text("Preview"),
                       ),
-                      const SizedBox(width: 10),
-                      OutlinedButton(
-                        onPressed: () {},
-                        child: const Text("Código"),
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+
+                    // TITLE + DESC
+                    Column(
+                      children: [
+                        Text(
+                          widget.title,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          widget.description,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: AppColors.textSecondary,
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    // 🔘 BUTTONS CENTRALIZADOS
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                          ),
+                          child: const Text("Preview"),
+                        ),
+                        const SizedBox(width: 10),
+                        OutlinedButton(
+                          onPressed: () {},
+                          child: const Text("Código"),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
