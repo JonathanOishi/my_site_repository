@@ -64,17 +64,17 @@ class EducationSection extends StatelessWidget {
 
                 const _EducationNode(
                   side: _NodeSide.left,
-                  period: '2023 - 2025 PREVISÃO',
+                  period: '2025 - 2026 em Andamento',
                   title:
                       'Pós-graduação em\nDesenvolvimento Mobile\n(Android e Multiplataforma)',
-                  subtitle: 'Instituição: INFET',
+                  subtitle: 'Instituição: INFNET ',
                 ),
 
                 const SizedBox(height: AppSpacing.lg),
 
                 const _EducationNode(
                   side: _NodeSide.right,
-                  period: 'CONCLUÍDO',
+                  period: 'CONCLUÍDO em 2024',
                   title:
                       'Tecnólogo em Análise e\nDesenvolvimento de Sistemas\n(ADS)',
                   subtitle: 'UNG',
