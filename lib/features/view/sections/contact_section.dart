@@ -146,13 +146,13 @@ class _ContactInfoCard extends StatelessWidget {
               _InfoChip(
                 icon: Icons.alternate_email,
                 title: 'EMAIL',
-                value: 'jonathan.oishi@dev.com',
+                value: 'jonathan_oishi@hotmail.com',
               ),
               SizedBox(height: AppSpacing.md),
               _InfoChip(
                 icon: Icons.location_on_outlined,
                 title: 'LOCALIDADE',
-                value: 'Pernambuco/BR',
+                value: 'São Paulo',
               ),
             ],
           ),
