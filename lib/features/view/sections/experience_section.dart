@@ -51,7 +51,7 @@ class ExperienceSection extends StatelessWidget {
                       color: AppColors.textPrimary,
                     ),
                     children: const [
-                      TextSpan(text: 'Experiencia '),
+                      TextSpan(text: 'Experiência '),
                       TextSpan(
                         text: 'Profissional',
                         style: TextStyle(color: AppColors.primary),
@@ -59,22 +59,27 @@ class ExperienceSection extends StatelessWidget {
                     ],
                   ),
                 ),
+
                 const SizedBox(height: AppSpacing.xxl),
+
                 const _TimelineNode(
                   side: _TimelineSide.right,
                   period: '2024 - 2025',
                   title: 'Arquiteto Desenvolvedor\nSênior',
                   description:
                       'Atuacao no planejamento de modulo interno e decisao de arquitetura corporativa.',
-                  isCurrent: false, // <--- Fica fixa
+                  isCurrent: false,
                 ),
+
+                const SizedBox(height: AppSpacing.lg),
+
                 const _TimelineNode(
                   side: _TimelineSide.left,
                   period: 'INICIO ATUAL',
                   title: 'Objective: Dev Flutter Junior',
                   description:
                       'Desenvolvimento orientado a performance e valor para produtos digitais.',
-                  isCurrent: true, // <--- Fica piscando (Sua meta)
+                  isCurrent: true,
                 ),
               ],
             ),
@@ -93,46 +98,46 @@ class _TimelineNode extends StatelessWidget {
     required this.period,
     required this.title,
     required this.description,
-    this.isCurrent = false, // Padrão é falso para não piscar tudo por engano
+    this.isCurrent = false,
   });
 
   final _TimelineSide side;
   final String period;
   final String title;
   final String description;
-  final bool isCurrent; // Controla se pisca ou não
+  final bool isCurrent;
+
+  Widget _buildDot(double size) {
+    if (isCurrent) {
+      return BlinkingDot(size: size);
+    }
+
+    return Container(
+      width: size,
+      height: size,
+      decoration: const BoxDecoration(
+        color: AppColors.primary,
+        shape: BoxShape.circle,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final isMobile = Responsive.isMobile(context);
 
-    // Widget da bolinha condicional (Evita duplicar código entre mobile/desktop)
-    Widget buildDot(double size) {
-      if (isCurrent) {
-        return BlinkingDot(size: size);
-      } else {
-        return Container(
-          width: size,
-          height: size,
-          decoration: const BoxDecoration(
-            color: AppColors.primary,
-            shape: BoxShape.circle,
-          ),
-        );
-      }
-    }
-
+    // 🔥 MOBILE
     if (isMobile) {
-      return SizedBox(
-        height: 158,
+      return IntrinsicHeight(
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
               width: 18,
               child: Column(
                 children: [
                   Expanded(child: Container(width: 1, color: AppColors.border)),
-                  buildDot(7), // Bolinha do Mobile
+                  _buildDot(7),
                   Expanded(child: Container(width: 1, color: AppColors.border)),
                 ],
               ),
@@ -149,32 +154,39 @@ class _TimelineNode extends StatelessWidget {
       );
     }
 
-    return SizedBox(
-      height: 170,
+    // 🔥 DESKTOP
+    return IntrinsicHeight(
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: side == _TimelineSide.left
-                ? _Card(period: period, title: title, description: description)
+                ? _Card(
+                    period: period,
+                    title: title,
+                    description: description,
+                  )
                 : const SizedBox.shrink(),
           ),
+
           SizedBox(
             width: 38,
             child: Column(
               children: [
-                Expanded(
-                  child: Container(width: 1, color: AppColors.border),
-                ),
-                buildDot(8), // Bolinha do Desktop
-                Expanded(
-                  child: Container(width: 1, color: AppColors.border),
-                ),
+                Expanded(child: Container(width: 1, color: AppColors.border)),
+                _buildDot(8),
+                Expanded(child: Container(width: 1, color: AppColors.border)),
               ],
             ),
           ),
+
           Expanded(
             child: side == _TimelineSide.right
-                ? _Card(period: period, title: title, description: description)
+                ? _Card(
+                    period: period,
+                    title: title,
+                    description: description,
+                  )
                 : const SizedBox.shrink(),
           ),
         ],
@@ -241,7 +253,6 @@ class _Card extends StatelessWidget {
   }
 }
 
-// COMPONENTE DA BOLINHA ANIMADA (Usada apenas quando isCurrent for true)
 class BlinkingDot extends StatefulWidget {
   final double size;
   final Color color;
