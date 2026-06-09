@@ -30,8 +30,6 @@ class ProjectsSection extends StatelessWidget {
       desktop: 50,
     );
 
-    final isMobile = Responsive.isMobile(context);
-
     return Container(
       width: double.infinity,
       color: AppColors.surfaceAlt,
@@ -109,8 +107,30 @@ class _Header extends StatelessWidget {
   }
 }
 
-class _ProjectsGrid extends StatelessWidget {
+class _ProjectsGrid extends StatefulWidget {
   const _ProjectsGrid();
+
+  @override
+  State<_ProjectsGrid> createState() => _ProjectsGridState();
+}
+
+class _ProjectsGridState extends State<_ProjectsGrid> {
+  late final PageController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = PageController(
+      viewportFraction: 0.86,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,14 +157,30 @@ class _ProjectsGrid extends StatelessWidget {
       return Column(
         children: [
           SizedBox(
-            height: 500,
+            height: 480,
             child: PageView.builder(
-              controller: PageController(viewportFraction: 0.86),
+              controller: _controller,
+              physics: const BouncingScrollPhysics(),
               itemCount: cards.length,
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: cards[index],
+                return AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    double value = 1.0;
+
+                    if (_controller.position.haveDimensions) {
+                      value = (_controller.page! - index).abs();
+                      value = (1 - (value * 0.18)).clamp(0.85, 1.0);
+                    }
+
+                    return Transform.scale(
+                      scale: value,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: cards[index],
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -155,7 +191,7 @@ class _ProjectsGrid extends StatelessWidget {
       );
     }
 
-    // 💻 DESKTOP / TABLET
+    // 💻 DESKTOP
     return LayoutBuilder(
       builder: (context, constraints) {
         final isDesktop = constraints.maxWidth >= 1000;
@@ -199,104 +235,98 @@ class _ProjectCardState extends State<_ProjectCard> {
 
   @override
   Widget build(BuildContext context) {
-    final isWeb = kIsWeb;
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => hover = true),
-      onExit: (_) => setState(() => hover = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOut,
-        transform:
-            (isWeb && hover) ? (Matrix4.identity()..scale(1.02)) : Matrix4.identity(),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceAlt,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: AppColors.border),
-          boxShadow: (isWeb && hover)
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  )
-                ]
-              : [],
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          children: [
-            AspectRatio(
-              aspectRatio: 16 / 10,
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOut,
+      decoration: BoxDecoration(
+        color: AppColors.surfaceAlt,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.border),
+        boxShadow: hover
+            ? [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.18),
+                  blurRadius: 18,
+                  offset: const Offset(0, 10),
+                )
+              ]
+            : [],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          AspectRatio(
+            aspectRatio: 16 / 10,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(18),
+              ),
               child: Image.asset(
                 widget.imageLink,
                 fit: BoxFit.cover,
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.md),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            widget.tag,
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.primary,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          widget.title,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          widget.description,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                      ],
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    widget.tag,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primary,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: const Text("Preview"),
-                        ),
-                        const SizedBox(width: 10),
-                        OutlinedButton(
-                          onPressed: () {},
-                          child: const Text("Código"),
-                        ),
-                      ],
-                    )
-                  ],
+                  ),
                 ),
-              ),
-            )
-          ],
-        ),
+                const SizedBox(height: 10),
+                Text(
+                  widget.title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  widget.description,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: const Text("Preview"),
+                    ),
+                    const SizedBox(width: 10),
+                    OutlinedButton(
+                      onPressed: () {},
+                      child: const Text("Código"),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
@@ -311,12 +341,12 @@ class _SwipeIndicator extends StatefulWidget {
 
 class _SwipeIndicatorState extends State<_SwipeIndicator>
     with SingleTickerProviderStateMixin {
-  late AnimationController c;
+  late final AnimationController _c;
 
   @override
   void initState() {
     super.initState();
-    c = AnimationController(
+    _c = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 900),
     )..repeat(reverse: true);
@@ -324,37 +354,22 @@ class _SwipeIndicatorState extends State<_SwipeIndicator>
 
   @override
   void dispose() {
-    c.dispose();
+    _c.dispose();
     super.dispose();
-  }
-
-  Widget dot(bool active) {
-    return AnimatedBuilder(
-      animation: c,
-      builder: (_, __) {
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          width: active ? 16 : 6,
-          height: 6,
-          decoration: BoxDecoration(
-            color: active
-                ? AppColors.primary
-                : AppColors.border.withOpacity(0.6),
-            borderRadius: BorderRadius.circular(20),
-          ),
-        );
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        dot(true),
-        dot(false),
-      ],
+    return FadeTransition(
+      opacity: _c,
+      child: const Text(
+        "← arraste para ver mais →",
+        style: TextStyle(
+          fontSize: 12,
+          color: Colors.grey,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
     );
   }
 }
