@@ -30,6 +30,8 @@ class ProjectsSection extends StatelessWidget {
       desktop: 50,
     );
 
+    final isMobile = Responsive.isMobile(context);
+
     return Container(
       width: double.infinity,
       color: AppColors.surfaceAlt,
@@ -45,8 +47,8 @@ class ProjectsSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildHeader(context, titleSize),
-                const SizedBox(height: AppSpacing.xl),
+                _Header(titleSize: titleSize),
+                const SizedBox(height: AppSpacing.lg),
                 const _ProjectsGrid(),
               ],
             ),
@@ -55,8 +57,15 @@ class ProjectsSection extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildHeader(BuildContext context, double titleSize) {
+class _Header extends StatelessWidget {
+  final double titleSize;
+
+  const _Header({required this.titleSize});
+
+  @override
+  Widget build(BuildContext context) {
     final isMobile = Responsive.isMobile(context);
 
     final title = Text.rich(
@@ -77,28 +86,26 @@ class ProjectsSection extends StatelessWidget {
     );
 
     final link = Text(
-      isMobile ? 'VER TODO CATÁLOGO' : 'Ver todo catálogo',
+      isMobile ? 'VER CATÁLOGO' : 'Ver todo catálogo',
       style: const TextStyle(
         color: AppColors.primary,
         fontWeight: FontWeight.w600,
       ),
     );
 
-    if (isMobile) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          title,
-          const SizedBox(height: 6),
-          link,
-        ],
-      );
-    }
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [title, link],
-    );
+    return isMobile
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              title,
+              const SizedBox(height: 6),
+              link,
+            ],
+          )
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [title, link],
+          );
   }
 }
 
@@ -125,24 +132,30 @@ class _ProjectsGrid extends StatelessWidget {
 
     final isMobile = Responsive.isMobile(context);
 
-    // 📱 MOBILE → SWIPE CAROUSEL
+    // 📱 MOBILE
     if (isMobile) {
-      return SizedBox(
-        height: 560,
-        child: PageView.builder(
-          controller: PageController(viewportFraction: 0.88),
-          itemCount: cards.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: cards[index],
-            );
-          },
-        ),
+      return Column(
+        children: [
+          SizedBox(
+            height: 500,
+            child: PageView.builder(
+              controller: PageController(viewportFraction: 0.86),
+              itemCount: cards.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: cards[index],
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 10),
+          const _SwipeIndicator(),
+        ],
       );
     }
 
-    // 💻 TABLET / DESKTOP → GRID
+    // 💻 DESKTOP / TABLET
     return LayoutBuilder(
       builder: (context, constraints) {
         final isDesktop = constraints.maxWidth >= 1000;
@@ -165,6 +178,11 @@ class _ProjectsGrid extends StatelessWidget {
 }
 
 class _ProjectCard extends StatefulWidget {
+  final String tag;
+  final String title;
+  final String description;
+  final String imageLink;
+
   const _ProjectCard({
     required this.tag,
     required this.title,
@@ -172,41 +190,35 @@ class _ProjectCard extends StatefulWidget {
     required this.imageLink,
   });
 
-  final String tag;
-  final String title;
-  final String description;
-  final String imageLink;
-
   @override
   State<_ProjectCard> createState() => _ProjectCardState();
 }
 
 class _ProjectCardState extends State<_ProjectCard> {
-  bool isHovered = false;
+  bool hover = false;
 
   @override
   Widget build(BuildContext context) {
     final isWeb = kIsWeb;
 
     return MouseRegion(
-      onEnter: (_) => setState(() => isHovered = true),
-      onExit: (_) => setState(() => isHovered = false),
+      onEnter: (_) => setState(() => hover = true),
+      onExit: (_) => setState(() => hover = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOut,
-        transform: (isWeb && isHovered)
-            ? (Matrix4.identity()..scale(1.02))
-            : Matrix4.identity(),
+        transform:
+            (isWeb && hover) ? (Matrix4.identity()..scale(1.02)) : Matrix4.identity(),
         decoration: BoxDecoration(
           color: AppColors.surfaceAlt,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(color: AppColors.border),
-          boxShadow: (isWeb && isHovered)
+          boxShadow: (isWeb && hover)
               ? [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.25),
-                    blurRadius: 25,
-                    offset: const Offset(0, 12),
+                    color: Colors.black.withValues(alpha: 0.2),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
                   )
                 ]
               : [],
@@ -214,7 +226,6 @@ class _ProjectCardState extends State<_ProjectCard> {
         clipBehavior: Clip.antiAlias,
         child: Column(
           children: [
-            // 🖼 IMAGE
             AspectRatio(
               aspectRatio: 16 / 10,
               child: Image.asset(
@@ -222,45 +233,37 @@ class _ProjectCardState extends State<_ProjectCard> {
                 fit: BoxFit.cover,
               ),
             ),
-
-            // 📦 CONTENT CENTRALIZADO
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(AppSpacing.md),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // TAG
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        widget.tag,
-                        style: const TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-
-                    // TITLE + DESC
                     Column(
                       children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            widget.tag,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
                         Text(
                           widget.title,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -270,21 +273,15 @@ class _ProjectCardState extends State<_ProjectCard> {
                           style: const TextStyle(
                             fontSize: 13,
                             color: AppColors.textSecondary,
-                            height: 1.4,
                           ),
                         ),
                       ],
                     ),
-
-                    // 🔘 BUTTONS CENTRALIZADOS
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
                           onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                          ),
                           child: const Text("Preview"),
                         ),
                         const SizedBox(width: 10),
@@ -293,14 +290,71 @@ class _ProjectCardState extends State<_ProjectCard> {
                           child: const Text("Código"),
                         ),
                       ],
-                    ),
+                    )
                   ],
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),
+    );
+  }
+}
+
+class _SwipeIndicator extends StatefulWidget {
+  const _SwipeIndicator();
+
+  @override
+  State<_SwipeIndicator> createState() => _SwipeIndicatorState();
+}
+
+class _SwipeIndicatorState extends State<_SwipeIndicator>
+    with SingleTickerProviderStateMixin {
+  late AnimationController c;
+
+  @override
+  void initState() {
+    super.initState();
+    c = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    c.dispose();
+    super.dispose();
+  }
+
+  Widget dot(bool active) {
+    return AnimatedBuilder(
+      animation: c,
+      builder: (_, __) {
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          width: active ? 16 : 6,
+          height: 6,
+          decoration: BoxDecoration(
+            color: active
+                ? AppColors.primary
+                : AppColors.border.withOpacity(0.6),
+            borderRadius: BorderRadius.circular(20),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        dot(true),
+        dot(false),
+      ],
     );
   }
 }
