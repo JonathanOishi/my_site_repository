@@ -31,7 +31,7 @@ class ExperienceSection extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      color: AppColors.background,
+      color: AppColors.surfaceAlt,
       child: Align(
         alignment: Alignment.topCenter,
         child: ConstrainedBox(
@@ -66,6 +66,7 @@ class ExperienceSection extends StatelessWidget {
                   title: 'Arquiteto Desenvolvedor\nSênior',
                   description:
                       'Atuacao no planejamento de modulo interno e decisao de arquitetura corporativa.',
+                  isCurrent: false, // <--- Fica fixa
                 ),
                 const _TimelineNode(
                   side: _TimelineSide.left,
@@ -73,6 +74,7 @@ class ExperienceSection extends StatelessWidget {
                   title: 'Objective: Dev Flutter Junior',
                   description:
                       'Desenvolvimento orientado a performance e valor para produtos digitais.',
+                  isCurrent: true, // <--- Fica piscando (Sua meta)
                 ),
               ],
             ),
@@ -91,16 +93,34 @@ class _TimelineNode extends StatelessWidget {
     required this.period,
     required this.title,
     required this.description,
+    this.isCurrent = false, // Padrão é falso para não piscar tudo por engano
   });
 
   final _TimelineSide side;
   final String period;
   final String title;
   final String description;
+  final bool isCurrent; // Controla se pisca ou não
 
   @override
   Widget build(BuildContext context) {
     final isMobile = Responsive.isMobile(context);
+
+    // Widget da bolinha condicional (Evita duplicar código entre mobile/desktop)
+    Widget buildDot(double size) {
+      if (isCurrent) {
+        return BlinkingDot(size: size);
+      } else {
+        return Container(
+          width: size,
+          height: size,
+          decoration: const BoxDecoration(
+            color: AppColors.primary,
+            shape: BoxShape.circle,
+          ),
+        );
+      }
+    }
 
     if (isMobile) {
       return SizedBox(
@@ -112,14 +132,7 @@ class _TimelineNode extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(child: Container(width: 1, color: AppColors.border)),
-                  Container(
-                    width: 7,
-                    height: 7,
-                    decoration: const BoxDecoration(
-                      color: AppColors.primary,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
+                  buildDot(7), // Bolinha do Mobile
                   Expanded(child: Container(width: 1, color: AppColors.border)),
                 ],
               ),
@@ -152,14 +165,7 @@ class _TimelineNode extends StatelessWidget {
                 Expanded(
                   child: Container(width: 1, color: AppColors.border),
                 ),
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: AppColors.primary,
-                    shape: BoxShape.circle,
-                  ),
-                ),
+                buildDot(8), // Bolinha do Desktop
                 Expanded(
                   child: Container(width: 1, color: AppColors.border),
                 ),
@@ -231,6 +237,77 @@ class _Card extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// COMPONENTE DA BOLINHA ANIMADA (Usada apenas quando isCurrent for true)
+class BlinkingDot extends StatefulWidget {
+  final double size;
+  final Color color;
+
+  const BlinkingDot({
+    super.key,
+    required this.size,
+    this.color = AppColors.primary,
+  });
+
+  @override
+  State<BlinkingDot> createState() => _BlinkingDotState();
+}
+
+class _BlinkingDotState extends State<BlinkingDot>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _animation = Tween<double>(begin: 0.15, end: 0.55).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: widget.size * 2.8,
+              height: widget.size * 2.8,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: widget.color.withOpacity(_animation.value),
+              ),
+            ),
+            Container(
+              width: widget.size,
+              height: widget.size,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: widget.color,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

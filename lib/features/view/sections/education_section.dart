@@ -31,7 +31,7 @@ class EducationSection extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      color: AppColors.surfaceAlt,
+      color: AppColors.background,
       child: Align(
         alignment: Alignment.topCenter,
         child: ConstrainedBox(

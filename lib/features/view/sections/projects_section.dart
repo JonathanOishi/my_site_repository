@@ -31,7 +31,7 @@ class ProjectsSection extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      color: AppColors.background,
+      color: AppColors.surfaceAlt,
       child: Align(
         alignment: Alignment.topCenter,
         child: ConstrainedBox(
