@@ -8,6 +8,7 @@ import 'package:jonathan_oishi_portfolio/features/view/sections/footer_section.d
 import 'package:jonathan_oishi_portfolio/features/view/sections/hero_section.dart';
 import 'package:jonathan_oishi_portfolio/features/view/sections/my_history.dart';
 import 'package:jonathan_oishi_portfolio/features/view/sections/projects_section.dart';
+import 'package:jonathan_oishi_portfolio/features/view/sections/services_section.dart';
 import 'package:jonathan_oishi_portfolio/features/view/sections/tech_stack_section.dart';
 import 'package:jonathan_oishi_portfolio/features/view/widgets/mobile_nav_drawer.dart';
 import 'package:jonathan_oishi_portfolio/features/view/widgets/nav_bar.dart';
@@ -31,6 +32,7 @@ class _HomePageState extends State<HomePage> {
     HomeSectionIds.projects: GlobalKey(),
     HomeSectionIds.contact: GlobalKey(),
     HomeSectionIds.footer: GlobalKey(),
+    HomeSectionIds.service: GlobalKey(),
   };
 
   void _scrollToSection(String id) {
@@ -93,6 +95,10 @@ class _HomePageState extends State<HomePage> {
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.projects],
               child: const ProjectsSection(),
+            ),
+            KeyedSubtree(
+              key: _sectionKeys[HomeSectionIds.service],
+              child: const ServicesSection(),
             ),
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.contact],

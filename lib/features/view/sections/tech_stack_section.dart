@@ -77,70 +77,119 @@ class TechGrid extends StatelessWidget {
               horizontal: 24,
               vertical: 80,
             ),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: categories.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: Responsive.responsive(
-                  context: context,
-                  mobile: 1,
-                  tablet: 2,
-                  desktop: 3,
-                ),
-                crossAxisSpacing: 24,
-                mainAxisSpacing: 24,
-                childAspectRatio: Responsive.responsive(
-                  context: context,
-                  mobile: 1.35,
-                  tablet: 1.15,
-                  desktop: 1.15,
-                ),
-              ),
-              itemBuilder: (_, index) {
-                final category = categories[index];
-
-                return Container(
-                  padding: const EdgeInsets.all(22),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceAlt,
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(
-                      color: AppColors.border,
+            child: Column(
+              children: [
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: Responsive.responsive(
+                        context: context,
+                        mobile: 34,
+                        tablet: 48,
+                        desktop: 56,
+                      ),
+                      fontWeight: FontWeight.w800,
                     ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        category['title'] as String,
-                        style: const TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
+                    children: const [
+                      TextSpan(
+                        text: 'Stack ',
+                        style: TextStyle(
+                          color: AppColors.textPrimary,
                         ),
                       ),
-
-                      const SizedBox(height: 24),
-
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ...(category['skills'] as List).map(
-                              (skill) => _SkillItem(
-                                icon: skill.$1 as IconData,
-                                name: skill.$2 as String,
-                                percentage: skill.$3 as int,
-                              ),
-                            ),
-                          ],
+                      TextSpan(
+                        text: 'Tecnológica',
+                        style: TextStyle(
+                          color: AppColors.primary,
                         ),
                       ),
                     ],
                   ),
-                );
-              },
+                ),
+
+                const SizedBox(height: 16),
+
+                Text(
+                  'As ferramentas que utilizo para construir o futuro do mobile.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: Responsive.responsive(
+                      context: context,
+                      mobile: 14,
+                      tablet: 16,
+                      desktop: 18,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 60),
+
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: categories.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: Responsive.responsive(
+                      context: context,
+                      mobile: 1,
+                      tablet: 2,
+                      desktop: 3,
+                    ),
+                    crossAxisSpacing: 24,
+                    mainAxisSpacing: 24,
+                    childAspectRatio: Responsive.responsive(
+                      context: context,
+                      mobile: 1.35,
+                      tablet: 1.15,
+                      desktop: 1.15,
+                    ),
+                  ),
+                  itemBuilder: (_, index) {
+                    final category = categories[index];
+
+                    return Container(
+                      padding: const EdgeInsets.all(22),
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceAlt,
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(
+                          color: AppColors.border,
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            category['title'] as String,
+                            style: const TextStyle(
+                              color: AppColors.primary,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ...(category['skills'] as List).map(
+                                  (skill) => _SkillItem(
+                                    icon: skill.$1 as IconData,
+                                    name: skill.$2 as String,
+                                    percentage: skill.$3 as int,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),

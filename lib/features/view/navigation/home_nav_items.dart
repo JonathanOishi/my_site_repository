@@ -9,6 +9,7 @@ class HomeSectionIds {
   static const String experience = 'experience';
   static const String education = 'education';
   static const String projects = 'projects';
+  static const String service = 'service';
   static const String contact = 'contact';
   static const String footer = 'footer';
 }
@@ -20,5 +21,6 @@ const List<HomeNavItem> homeNavItems = [
   HomeNavItem(id: HomeSectionIds.experience, label: 'Experiencia'),
   HomeNavItem(id: HomeSectionIds.education, label: 'Formacao'),
   HomeNavItem(id: HomeSectionIds.projects, label: 'Projetos'),
+  HomeNavItem(id: HomeSectionIds.service, label: 'Service'),
   HomeNavItem(id: HomeSectionIds.contact, label: 'Contato', isPrimary: true),
 ];
