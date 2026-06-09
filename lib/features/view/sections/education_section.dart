@@ -51,28 +51,33 @@ class EducationSection extends StatelessWidget {
                       color: AppColors.textPrimary,
                     ),
                     children: const [
-                      TextSpan(text: 'Formacao '),
+                      TextSpan(text: 'Formação '),
                       TextSpan(
-                        text: 'Academica',
+                        text: 'Acadêmica',
                         style: TextStyle(color: AppColors.primary),
                       ),
                     ],
                   ),
                 ),
+
                 const SizedBox(height: AppSpacing.xxl),
+
                 const _EducationNode(
                   side: _NodeSide.left,
-                  period: '2023 - 2025 PREVISAO',
+                  period: '2023 - 2025 PREVISÃO',
                   title:
-                      'Pos-graduacao em\nDesenvolvimento Mobile\n(Android e Multiplataforma)',
-                  subtitle: 'Instituicao: IFAA Americano',
+                      'Pós-graduação em\nDesenvolvimento Mobile\n(Android e Multiplataforma)',
+                  subtitle: 'Instituição: INFET',
                 ),
+
+                const SizedBox(height: AppSpacing.lg),
+
                 const _EducationNode(
                   side: _NodeSide.right,
-                  period: 'CONCLUIDO',
+                  period: 'CONCLUÍDO',
                   title:
-                      'Tecnologo em Analise e\nDesenvolvimento de Sistemas\n(ADS)',
-                  subtitle: 'Unibra Superior',
+                      'Tecnólogo em Análise e\nDesenvolvimento de Sistemas\n(ADS)',
+                  subtitle: 'UNG',
                 ),
               ],
             ),
@@ -102,28 +107,34 @@ class _EducationNode extends StatelessWidget {
   Widget build(BuildContext context) {
     final isMobile = Responsive.isMobile(context);
 
+    Widget buildDot(double size) {
+      return Container(
+        width: size,
+        height: size,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.primary,
+        ),
+      );
+    }
+
+    // 🔥 MOBILE
     if (isMobile) {
-      return SizedBox(
-        height: 160,
+      return IntrinsicHeight(
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
               width: 18,
               child: Column(
                 children: [
                   Expanded(child: Container(width: 1, color: AppColors.border)),
-                  Container(
-                    width: 7,
-                    height: 7,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.primary,
-                    ),
-                  ),
+                  buildDot(7),
                   Expanded(child: Container(width: 1, color: AppColors.border)),
                 ],
               ),
             ),
+
             Expanded(
               child: _EducationCard(
                 period: period,
@@ -136,9 +147,10 @@ class _EducationNode extends StatelessWidget {
       );
     }
 
-    return SizedBox(
-      height: 170,
+    // 🔥 DESKTOP
+    return IntrinsicHeight(
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: side == _NodeSide.left
@@ -149,23 +161,18 @@ class _EducationNode extends StatelessWidget {
                   )
                 : const SizedBox.shrink(),
           ),
+
           SizedBox(
             width: 38,
             child: Column(
               children: [
                 Expanded(child: Container(width: 1, color: AppColors.border)),
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.primary,
-                  ),
-                ),
+                buildDot(8),
                 Expanded(child: Container(width: 1, color: AppColors.border)),
               ],
             ),
           ),
+
           Expanded(
             child: side == _NodeSide.right
                 ? _EducationCard(
@@ -215,6 +222,7 @@ class _EducationCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.sm),
+
           Text(
             title,
             style: const TextStyle(
@@ -224,7 +232,9 @@ class _EducationCard extends StatelessWidget {
               height: 1.2,
             ),
           ),
+
           const SizedBox(height: AppSpacing.xs),
+
           Text(
             subtitle,
             style: const TextStyle(
