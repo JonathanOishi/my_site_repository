@@ -9,7 +9,7 @@
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="Portfólio Jonathan Oishi">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,6 +21,18 @@
 
   <title>Jonathan Oishi | Desenvolvedor Flutter</title>
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    html, body, flutter-view {
+      margin: 0 !important;
+      padding: 0 !important;
+      background-color: #0F1413 !important; /* Cor idêntica ao seu app */
+      width: 100% !important;
+      height: 100% !important;
+      overflow: hidden !important;
+      position: fixed !important;
+    }
+  </style>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>

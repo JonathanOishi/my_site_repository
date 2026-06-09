@@ -60,6 +60,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.background,
+      resizeToAvoidBottomInset: false,
+      // Se estivesse usando um SafeArea aqui ao redor do body, as bordas brancas voltariam.
+      // Do jeito que está (direto o SingleChildScrollView), o Flutter Web pode ocupar 100% da tela.
       drawer: MobileNavDrawer(
         items: homeNavItems,
         onItemTap: _onDrawerItemTap,
@@ -106,7 +109,8 @@ class _HomePageState extends State<HomePage> {
             ),
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.footer],
-              child: const FooterSection(),
+              child:
+                  const FooterSection(), // <-- Este cara já tem o bottom padding dinâmico que criamos!
             ),
           ],
         ),

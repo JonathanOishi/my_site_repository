@@ -8,6 +8,9 @@ class FooterSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Detecta o espaçamento da barra inferior do sistema (iPhone/Androids novos)
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
     final horizontalPadding = Responsive.responsive<double>(
       context: context,
       mobile: 20,
@@ -34,56 +37,65 @@ class FooterSection extends StatelessWidget {
               horizontal: horizontalPadding,
               vertical: AppSpacing.xxl,
             ),
-            child: Responsive.responsive<Widget>(
-              context: context,
-              mobile: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _FooterBrand(),
-                  SizedBox(height: AppSpacing.xl),
-                  _FooterLinks(),
-                  SizedBox(height: AppSpacing.lg),
-                  _FooterSocial(),
-                ],
-              ),
-              tablet: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Expanded(
-                    flex: 4,
-                    child: _FooterBrand(),
+            // Mudamos para uma Column para injetar o espaçamento de segurança no final de tudo
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Responsive.responsive<Widget>(
+                  context: context,
+                  mobile: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _FooterBrand(),
+                      SizedBox(height: AppSpacing.xl),
+                      _FooterLinks(),
+                      SizedBox(height: AppSpacing.lg),
+                      _FooterSocial(),
+                    ],
                   ),
-                  const SizedBox(width: AppSpacing.xxl),
-                  Expanded(
-                    flex: 5,
-                    child: Row(
-                      children: const [
-                        Expanded(child: _FooterLinks()),
-                        Expanded(child: _FooterSocial()),
-                      ],
-                    ),
+                  tablet: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Expanded(
+                        flex: 4,
+                        child: _FooterBrand(),
+                      ),
+                      const SizedBox(width: AppSpacing.xxl),
+                      Expanded(
+                        flex: 5,
+                        child: Row(
+                          children: const [
+                            Expanded(child: _FooterLinks()),
+                            Expanded(child: _FooterSocial()),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              desktop: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Expanded(
-                    flex: 4,
-                    child: _FooterBrand(),
+                  desktop: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Expanded(
+                        flex: 4,
+                        child: _FooterBrand(),
+                      ),
+                      const SizedBox(width: AppSpacing.xxl),
+                      Expanded(
+                        flex: 5,
+                        child: Row(
+                          children: const [
+                            Expanded(child: _FooterLinks()),
+                            Expanded(child: _FooterSocial()),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: AppSpacing.xxl),
-                  Expanded(
-                    flex: 5,
-                    child: Row(
-                      children: const [
-                        Expanded(child: _FooterLinks()),
-                        Expanded(child: _FooterSocial()),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+
+                // MUDANÇA AQUI: Adiciona o espaçamento dinâmico para a barra de navegação do celular
+                if (bottomPadding > 0) SizedBox(height: bottomPadding),
+              ],
             ),
           ),
         ),
