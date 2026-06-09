@@ -66692,7 +66692,7 @@ J(a){var s=null,r=A.df(10),q=A.fQ(B.a5)
 return A.bd(B.h3,A.bN(this.c,s,s,B.jm,s),B.m,s,new A.bK(B.zX,s,q,r,s,s,B.a4),44,s,B.eM,1/0)}}
 A.CY.prototype={
 J(a){var s=null,r=A.bW(a,72,20,40)
-return A.bd(s,new A.dp(B.bQ,s,s,new A.d7(new A.a7(0,A.bW(a,1240,720,980),0,1/0),new A.bQ(new A.aJ(r,64,r,64),A.bT(A.c([A.pE(A.fC(B.E2,s,s,s,s,s,s,s,s,A.d_(s,s,B.i,s,s,s,s,s,s,s,s,A.bW(a,52,36,46),s,s,B.aN,s,s,!0,s,s,s,s,s,s,s,s),s),s,s),B.wb,B.Rg,B.b_,B.Rf],t.p),B.z,B.p,B.q),s),s),s),B.m,B.aL,s,s,s,s,1/0)}}
+return A.bd(s,new A.dp(B.bQ,s,s,new A.d7(new A.a7(0,A.bW(a,1240,720,980),0,1/0),new A.bQ(new A.aJ(r,64,r,64),A.bT(A.c([A.pE(A.fC(B.E2,s,s,s,s,s,s,s,s,A.d_(s,s,B.i,s,s,s,s,s,s,s,s,A.bW(a,52,36,46),s,s,B.aN,s,s,!0,s,s,s,s,s,s,s,s),s),s,s),B.wb,B.Rf,B.b_,B.Rg],t.p),B.z,B.p,B.q),s),s),s),B.m,B.aL,s,s,s,s,1/0)}}
 A.KL.prototype={
 G(){return"_NodeSide."+this.b}}
 A.y4.prototype={
@@ -72621,10 +72621,10 @@ B.cW=new A.Jd(1,"vertical")
 B.bz=new A.y0(0,"ready")
 B.wT=new A.y0(1,"possible")
 B.e5=new A.y0(2,"accepted")
-B.xc=new A.KL(1,"right")
-B.Rf=new A.y4(B.xc,"CONCLU\xcdDO","Tecn\xf3logo em An\xe1lise e\nDesenvolvimento de Sistemas\n(ADS)","UNG",null)
 B.xb=new A.KL(0,"left")
-B.Rg=new A.y4(B.xb,"2023 - 2025 PREVIS\xc3O","P\xf3s-gradua\xe7\xe3o em\nDesenvolvimento Mobile\n(Android e Multiplataforma)","Institui\xe7\xe3o: INFET",null)
+B.Rf=new A.y4(B.xb,"2025 - 2026 em Andamento","P\xf3s-gradua\xe7\xe3o em\nDesenvolvimento Mobile\n(Android e Multiplataforma)","Institui\xe7\xe3o: INFNET ",null)
+B.xc=new A.KL(1,"right")
+B.Rg=new A.y4(B.xc,"CONCLU\xcdDO em 2024","Tecn\xf3logo em An\xe1lise e\nDesenvolvimento de Sistemas\n(ADS)","UNG",null)
 B.X=new A.nj(0,"initial")
 B.e6=new A.nj(1,"active")
 B.wU=new A.nj(2,"inactive")
