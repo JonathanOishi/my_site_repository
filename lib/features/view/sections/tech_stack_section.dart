@@ -139,7 +139,7 @@ class TechGrid extends StatelessWidget {
                       context: context,
                       mobile: 1.05,
                       tablet: 1.15,
-                      desktop: 1.15,
+                      desktop: 1.0,
                     ),
                   ),
                   itemBuilder: (_, index) {

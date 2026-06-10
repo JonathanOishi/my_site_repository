@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/app_spacing.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/responsive.dart';
@@ -122,7 +121,7 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
     super.initState();
 
     _controller = PageController(
-      viewportFraction: 0.86,
+      viewportFraction: 0.95,
     );
   }
 
@@ -136,17 +135,18 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
   Widget build(BuildContext context) {
     final cards = const [
       _ProjectCard(
-        tag: 'FLUTTER',
-        title: 'OneTasks',
+        tag: 'Kotlin',
+        title: 'MyFinancy',
         description:
-            'Gerenciamento de tarefas com gamificação e notificações inteligentes.',
+            'My Finances Aplicativo Android desenvolvido em Kotlin para gestão financeira pessoal, com autenticação de usuários, controle de transações, integração com Firebase, consumo de API REST e arquitetura MVVM.',
         imageLink: 'assets/my_financy.png',
       ),
       _ProjectCard(
-        tag: 'FINTECH',
-        title: 'Finance App',
-        description: 'Controle financeiro moderno e minimalista.',
-        imageLink: 'assets/my_financy.png',
+        tag: 'Flutter',
+        title: 'GeoTasks',
+        description:
+            'Aplicativo de gerenciamento de tarefas desenvolvido em Flutter, com autenticação, sincronização em tempo real, geolocalização e gerenciamento de perfil. Utiliza arquitetura MVVM, Provider e Firebase para persistência e autenticação.',
+        imageLink: 'assets/geo_tasks.png',
       ),
     ];
 
@@ -239,21 +239,21 @@ class _ProjectCardState extends State<_ProjectCard> {
       duration: const Duration(milliseconds: 250),
       curve: Curves.easeOut,
       decoration: BoxDecoration(
-        color: AppColors.surfaceAlt,
+        color: AppColors.background,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: AppColors.border),
         boxShadow: hover
             ? [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.18),
+                  color: Colors.black.withValues(alpha: 0.18),
                   blurRadius: 18,
                   offset: const Offset(0, 10),
-                )
+                ),
               ]
             : [],
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AspectRatio(
             aspectRatio: 16 / 10,
@@ -278,7 +278,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.15),
+                    color: AppColors.primary.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -322,10 +322,10 @@ class _ProjectCardState extends State<_ProjectCard> {
                       child: const Text("Código"),
                     ),
                   ],
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

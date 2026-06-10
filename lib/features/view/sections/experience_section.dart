@@ -305,7 +305,7 @@ class _BlinkingDotState extends State<BlinkingDot>
               height: widget.size * 2.8,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: widget.color.withOpacity(_animation.value),
+                color: widget.color.withValues(alpha: _animation.value),
               ),
             ),
             Container(
