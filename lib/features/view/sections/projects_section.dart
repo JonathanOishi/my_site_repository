@@ -132,7 +132,6 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
 
   @override
   Widget build(BuildContext context) {
-    // 💡 ATUALIZADO: Passando agora uma lista de strings em 'technologies'
     final cards = const [
       _ProjectCard(
         title: 'MyFinancy',
@@ -156,7 +155,7 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
       return Column(
         children: [
           SizedBox(
-            height: 520, // 💡 Aumentado levemente para acomodar as múltiplas tags sem estourar
+            height: 540, 
             child: PageView.builder(
               controller: _controller,
               physics: const BouncingScrollPhysics(),
@@ -202,7 +201,7 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
             crossAxisCount: isDesktop ? 3 : 2,
             crossAxisSpacing: AppSpacing.md,
             mainAxisSpacing: AppSpacing.md,
-            mainAxisExtent: 560, // 💡 Ajustado para suportar o crescimento das tags
+            mainAxisExtent: 560, 
           ),
           itemBuilder: (context, index) => cards[index],
         );
@@ -215,7 +214,7 @@ class _ProjectCard extends StatefulWidget {
   final String title;
   final String description;
   final String imageLink;
-  final List<String> technologies; // 🛠️ Nova propriedade para lista de tecnologias
+  final List<String> technologies; 
 
   const _ProjectCard({
     required this.title,
@@ -254,7 +253,7 @@ class _ProjectCardState extends State<_ProjectCard> {
               : [],
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 🛠️ Alinhado à esquerda para um visual de portfólio moderno
+          crossAxisAlignment: CrossAxisAlignment.start, 
           children: [
             AspectRatio(
               aspectRatio: 16 / 10,
@@ -274,10 +273,9 @@ class _ProjectCardState extends State<_ProjectCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 🛠️ SEÇÃO DOS CHIPS DE TECNOLOGIAS (Dinâmico com Wrap)
                     Wrap(
-                      spacing: 6, // Espaçamento horizontal entre os chips
-                      runSpacing: 6, // Espaçamento vertical caso quebre de linha
+                      spacing: 6, 
+                      runSpacing: 6, 
                       children: widget.technologies.map((tech) {
                         return Container(
                           padding: const EdgeInsets.symmetric(
@@ -301,7 +299,6 @@ class _ProjectCardState extends State<_ProjectCard> {
                     ),
                     const SizedBox(height: 14),
                     
-                    // TÍTULO
                     Text(
                       widget.title,
                       style: const TextStyle(
@@ -311,22 +308,22 @@ class _ProjectCardState extends State<_ProjectCard> {
                     ),
                     const SizedBox(height: 8),
                     
-                    // DESCRIÇÃO
-                    Expanded(
-                      child: Text(
-                        widget.description,
-                        maxLines: 4,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          height: 1.4,
-                          color: AppColors.textSecondary,
-                        ),
+                    Text(
+                      widget.description,
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        height: 1.4,
+                        color: AppColors.textSecondary,
                       ),
                     ),
+                    
+                    // 💡 O Spacer garante que os botões fiquem alinhados embaixo,
+                    // empurrando o Row para o fim do card independente do tamanho do texto.
+                    const Spacer(), 
                     const SizedBox(height: 12),
                     
-                    // BOTÕES DE AÇÃO
                     Row(
                       children: [
                         Expanded(
@@ -352,7 +349,7 @@ class _ProjectCardState extends State<_ProjectCard> {
         ),
       ),
     );
-  );
+  } // 🛠️ CORRIGIDO: Removido o ponto e vírgula e parêntese extra que travava o código.
 }
 
 class _SwipeIndicator extends StatefulWidget {
