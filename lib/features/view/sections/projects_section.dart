@@ -155,11 +155,12 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
       return Column(
         children: [
           SizedBox(
-            // 🛠️ Altura reduzida no mobile para aproximar os cards e remover o vácuo
-            height: 480, 
+            height: 480, // Card compacto
             child: PageView.builder(
               controller: _controller,
-              physics: const BouncingScrollPhysics(),
+              // 💡 CORREÇÃO DO DRAWER: Muda a física para não capturar o gesto horizontal.
+              // Isso permite que o Drawer do Scaffold volte a abrir normalmente com o swipe.
+              physics: const NeverScrollableScrollPhysics(), 
               itemCount: cards.length,
               itemBuilder: (context, index) {
                 return AnimatedBuilder(
@@ -202,7 +203,7 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
             crossAxisCount: isDesktop ? 3 : 2,
             crossAxisSpacing: AppSpacing.md,
             mainAxisSpacing: AppSpacing.md,
-            // 🛠️ Reduzido de 640 para 460/490 para compactar todo o bloco no GridView desktop/tablet
+            // 🛠️ Medida corrigida para Web para deixar tudo próximo e compacto
             mainAxisExtent: isDesktop ? 460 : 490, 
           ),
           itemBuilder: (context, index) => cards[index],
@@ -271,7 +272,7 @@ class _ProjectCardState extends State<_ProjectCard> {
               ),
             ),
             
-            // 2. Bloco Único de Conteúdo Integrado (Sem Expanded ou Spacers intermediários)
+            // 2. Bloco Único de Conteúdo Integrado (Sem vácuo ou espaços gigantes)
             Padding(
               padding: const EdgeInsets.all(AppSpacing.md),
               child: Column(
@@ -288,7 +289,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                   ),
                   const SizedBox(height: 6),
                   
-                  // DESCRIÇÃO (Exibe até 3 linhas de forma elegante e coesa)
+                  // DESCRIÇÃO (Exibe até 3 linhas sem cortar de forma feia)
                   Text(
                     widget.description,
                     maxLines: 3,
@@ -301,7 +302,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                   ),
                   const SizedBox(height: 12),
                   
-                  // 🛠️ CHIPS DE TECNOLOGIAS (Movido para baixo da descrição)
+                  // 🛠️ CHIPS DE TECNOLOGIAS (Posicionados abaixo da descrição)
                   Wrap(
                     spacing: 6, 
                     runSpacing: 6, 
@@ -328,7 +329,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                   ),
                   const SizedBox(height: 16),
                   
-                  // BOTÕES DE AÇÃO (Colados logo abaixo das tecnologias)
+                  // BOTÕES DE AÇÃO (Colados de forma compacta e responsiva)
                   Row(
                     children: [
                       Expanded(
