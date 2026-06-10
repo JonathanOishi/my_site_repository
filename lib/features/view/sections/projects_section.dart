@@ -134,14 +134,12 @@ class _ProjectsGrid extends StatelessWidget {
       return Column(
         children: [
           SizedBox(
-            height: 440, // Altura perfeita e compacta para o card mobile
+            height: 470, // Altura ajustada para comportar a quebra das tags no mobile
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(), // Scroll nativo e fluido
+              physics: const BouncingScrollPhysics(),
               itemCount: cards.length,
               itemBuilder: (context, index) {
-                // 💡 SOLUÇÃO: Usar um container com largura definida no ListView
-                // resolve o conflito com o Drawer, pois o gesto não fica preso nas bordas
                 return Container(
                   width: MediaQuery.of(context).size.width * 0.85,
                   margin: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
@@ -168,7 +166,7 @@ class _ProjectsGrid extends StatelessWidget {
             crossAxisCount: isDesktop ? 3 : 2,
             crossAxisSpacing: AppSpacing.md,
             mainAxisSpacing: AppSpacing.md,
-            mainAxisExtent: isDesktop ? 460 : 490, // Layout compacto WEB
+            mainAxisExtent: 490, // Altura fixa simétrica para a Web
           ),
           itemBuilder: (context, index) => cards[index],
         );
@@ -219,102 +217,109 @@ class _ProjectCardState extends State<_ProjectCard> {
                 ]
               : [],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, 
-          children: [
-            // 1. Imagem do Projeto
-            AspectRatio(
-              aspectRatio: 16 / 10,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(18),
-                ),
-                child: Image.asset(
-                  widget.imageLink,
-                  fit: BoxFit.cover,
+        child: IntrinsicHeight(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start, 
+            children: [
+              // 1. Imagem do Projeto
+              AspectRatio(
+                aspectRatio: 16 / 10,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(18),
+                  ),
+                  child: Image.asset(
+                    widget.imageLink,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            
-            // 2. Bloco Único de Conteúdo Integrado
-            Padding(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // TÍTULO
-                  Text(
-                    widget.title,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  
-                  // DESCRIÇÃO (Compacta em até 3 linhas)
-                  Text(
-                    widget.description,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      height: 1.4,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  
-                  // CHIPS DE TECNOLOGIAS (Abaixo da descrição)
-                  Wrap(
-                    spacing: 6, 
-                    runSpacing: 6, 
-                    children: widget.technologies.map((tech) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          tech,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  const SizedBox(height: 16),
-                  
-                  // BOTÕES DE AÇÃO
-                  Row(
+              
+              // 2. Bloco Único de Conteúdo Integrado
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.md),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: const Text("Preview"),
+                      // TÍTULO
+                      Text(
+                        widget.title,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textPrimary,
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () {},
-                          child: const Text("Código"),
+                      const SizedBox(height: 6),
+                      
+                      // DESCRIÇÃO (Compacta em até 3 linhas)
+                      Text(
+                        widget.description,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          height: 1.4,
+                          color: AppColors.textSecondary,
                         ),
+                      ),
+                      const SizedBox(height: 12),
+                      
+                      // CHIPS DE TECNOLOGIAS (Abaixo da descrição)
+                      Wrap(
+                        spacing: 6, 
+                        runSpacing: 6, 
+                        children: widget.technologies.map((tech) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              tech,
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      
+                      // Empurra dinamicamente tudo o que está abaixo para o rodapé do Card
+                      const Spacer(),
+                      const SizedBox(height: 16),
+                      
+                      // BOTÕES DE AÇÃO
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              child: const Text("Preview"),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () {},
+                              child: const Text("Código"),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
