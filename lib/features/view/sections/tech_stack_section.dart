@@ -7,6 +7,7 @@ class TechGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Mantive sua lista idêntica de categorias
     final categories = [
       {
         'title': 'Desenvolvimento Mobile',
@@ -64,6 +65,14 @@ class TechGrid extends StatelessWidget {
       },
     ];
 
+    // Detectando colunas dinamicamente para o cálculo de largura do Wrap
+    final int columns = Responsive.responsive(
+      context: context,
+      mobile: 1,
+      tablet: 2,
+      desktop: 3,
+    );
+
     return Container(
       width: double.infinity,
       color: AppColors.background,
@@ -101,9 +110,7 @@ class TechGrid extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 16),
-
                 Text(
                   'As ferramentas que utilizo para construir o futuro do mobile.',
                   textAlign: TextAlign.center,
@@ -117,80 +124,60 @@ class TechGrid extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 60),
+                
+                // 🛠️ MUDANÇA AQUI: LayoutBuilder + Wrap para perfeito controle de tamanho sem travar altura fixa
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final double spacing = 24.0;
+                    // Calcula a largura exata que cada card deve ter baseado nas colunas desejadas
+                    final double itemWidth = (constraints.maxWidth - (spacing * (columns - 1))) / columns;
 
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: categories.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: Responsive.responsive(
-                      context: context,
-                      mobile: 1,
-                      tablet: 2,
-                      desktop: 3,
-                    ),
-                    crossAxisSpacing: 24,
-                    mainAxisSpacing: 24,
-
-                    // 🔥 FIX PRINCIPAL (evita corte no iPhone/Safari)
-                    childAspectRatio: Responsive.responsive(
-                      context: context,
-                      mobile: 1.05,
-                      tablet: 1.15,
-                      desktop: 1.0,
-                    ),
-                  ),
-                  itemBuilder: (_, index) {
-                    final category = categories[index];
-
-                    return Container(
-                      padding: const EdgeInsets.all(22),
-                      decoration: BoxDecoration(
-                        color: AppColors.surfaceAlt,
-                        borderRadius: BorderRadius.circular(18),
-                        border: Border.all(color: AppColors.border),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // 🔥 título protegido contra overflow
-                          SizedBox(
-                            height: 54,
-                            child: Text(
-                              category['title'] as String,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: AppColors.primary,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w700,
-                                height: 1.2,
-                              ),
-                            ),
+                    return Wrap(
+                      spacing: spacing,
+                      runSpacing: spacing,
+                      children: categories.map((category) {
+                        return Container(
+                          width: itemWidth,
+                          padding: const EdgeInsets.all(22),
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceAlt,
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(color: AppColors.border),
                           ),
-
-                          const SizedBox(height: 18),
-
-                          Expanded(
-                            child: Column(
-                              children: [
-                                ...(category['skills'] as List).map(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min, // Faz o card abraçar apenas o conteúdo necessário
+                            children: [
+                              Text(
+                                category['title'] as String,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: AppColors.primary,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.2,
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+                              // Removido o 'Expanded' daqui, permitindo que a Column cresça naturalmente
+                              Column(
+                                children: (category['skills'] as List).map(
                                   (skill) => Padding(
-                                    padding: const EdgeInsets.only(bottom: 12),
+                                    padding: const EdgeInsets.only(bottom: 16),
                                     child: _SkillItem(
                                       icon: skill.$1 as IconData,
                                       name: skill.$2 as String,
                                       percentage: skill.$3 as int,
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
+                                ).toList(),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        );
+                      }).toList(),
                     );
                   },
                 ),
@@ -232,10 +219,10 @@ class _SkillItem extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 name,
@@ -248,7 +235,6 @@ class _SkillItem extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 6),
-
               Row(
                 children: [
                   Expanded(
@@ -265,7 +251,6 @@ class _SkillItem extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-
                   SizedBox(
                     width: 36,
                     child: Text(
