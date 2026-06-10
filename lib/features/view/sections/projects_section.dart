@@ -119,7 +119,6 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
   @override
   void initState() {
     super.initState();
-
     _controller = PageController(
       viewportFraction: 0.95,
     );
@@ -133,31 +132,31 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
 
   @override
   Widget build(BuildContext context) {
+    // 💡 ATUALIZADO: Passando agora uma lista de strings em 'technologies'
     final cards = const [
       _ProjectCard(
-        tag: 'Kotlin',
         title: 'MyFinancy',
         description:
             'My Finances Aplicativo Android desenvolvido em Kotlin para gestão financeira pessoal, com autenticação de usuários, controle de transações, integração com Firebase, consumo de API REST e arquitetura MVVM.',
         imageLink: 'assets/my_financy.png',
+        technologies: ['Kotlin', 'Firebase', 'REST API', 'MVVM'],
       ),
       _ProjectCard(
-        tag: 'Flutter',
         title: 'GeoTasks',
         description:
             'Aplicativo de gerenciamento de tarefas desenvolvido em Flutter, com autenticação, sincronização em tempo real, geolocalização e gerenciamento de perfil. Utiliza arquitetura MVVM, Provider e Firebase para persistência e autenticação.',
         imageLink: 'assets/geo_tasks.png',
+        technologies: ['Flutter', 'Dart', 'Provider', 'Geolocalização', 'Firebase'],
       ),
     ];
 
     final isMobile = Responsive.isMobile(context);
 
-    // 📱 MOBILE
     if (isMobile) {
       return Column(
         children: [
           SizedBox(
-            height: 480,
+            height: 520, // 💡 Aumentado levemente para acomodar as múltiplas tags sem estourar
             child: PageView.builder(
               controller: _controller,
               physics: const BouncingScrollPhysics(),
@@ -191,7 +190,6 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
       );
     }
 
-    // 💻 DESKTOP
     return LayoutBuilder(
       builder: (context, constraints) {
         final isDesktop = constraints.maxWidth >= 1000;
@@ -204,7 +202,7 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
             crossAxisCount: isDesktop ? 3 : 2,
             crossAxisSpacing: AppSpacing.md,
             mainAxisSpacing: AppSpacing.md,
-            mainAxisExtent: 520,
+            mainAxisExtent: 560, // 💡 Ajustado para suportar o crescimento das tags
           ),
           itemBuilder: (context, index) => cards[index],
         );
@@ -214,16 +212,16 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
 }
 
 class _ProjectCard extends StatefulWidget {
-  final String tag;
   final String title;
   final String description;
   final String imageLink;
+  final List<String> technologies; // 🛠️ Nova propriedade para lista de tecnologias
 
   const _ProjectCard({
-    required this.tag,
     required this.title,
     required this.description,
     required this.imageLink,
+    required this.technologies,
   });
 
   @override
@@ -235,101 +233,126 @@ class _ProjectCardState extends State<_ProjectCard> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.easeOut,
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.border),
-        boxShadow: hover
-            ? [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.18),
-                  blurRadius: 18,
-                  offset: const Offset(0, 10),
+    return MouseRegion(
+      onEnter: (_) => setState(() => hover = true),
+      onExit: (_) => setState(() => hover = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+        decoration: BoxDecoration(
+          color: AppColors.background,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.border),
+          boxShadow: hover
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.18),
+                    blurRadius: 18,
+                    offset: const Offset(0, 10),
+                  ),
+                ]
+              : [],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start, // 🛠️ Alinhado à esquerda para um visual de portfólio moderno
+          children: [
+            AspectRatio(
+              aspectRatio: 16 / 10,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(18),
                 ),
-              ]
-            : [],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          AspectRatio(
-            aspectRatio: 16 / 10,
-            child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(18),
-              ),
-              child: Image.asset(
-                widget.imageLink,
-                fit: BoxFit.cover,
+                child: Image.asset(
+                  widget.imageLink,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    widget.tag,
-                    style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  widget.title,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  widget.description,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: const Text("Preview"),
+                    // 🛠️ SEÇÃO DOS CHIPS DE TECNOLOGIAS (Dinâmico com Wrap)
+                    Wrap(
+                      spacing: 6, // Espaçamento horizontal entre os chips
+                      runSpacing: 6, // Espaçamento vertical caso quebre de linha
+                      children: widget.technologies.map((tech) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            tech,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        );
+                      }).toList(),
                     ),
-                    const SizedBox(width: 10),
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: const Text("Código"),
+                    const SizedBox(height: 14),
+                    
+                    // TÍTULO
+                    Text(
+                      widget.title,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    
+                    // DESCRIÇÃO
+                    Expanded(
+                      child: Text(
+                        widget.description,
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          height: 1.4,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    
+                    // BOTÕES DE AÇÃO
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            child: const Text("Preview"),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {},
+                            child: const Text("Código"),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
-  }
+  );
 }
 
 class _SwipeIndicator extends StatefulWidget {
