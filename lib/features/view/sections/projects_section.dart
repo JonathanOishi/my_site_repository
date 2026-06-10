@@ -106,29 +106,8 @@ class _Header extends StatelessWidget {
   }
 }
 
-class _ProjectsGrid extends StatefulWidget {
+class _ProjectsGrid extends StatelessWidget {
   const _ProjectsGrid();
-
-  @override
-  State<_ProjectsGrid> createState() => _ProjectsGridState();
-}
-
-class _ProjectsGridState extends State<_ProjectsGrid> {
-  late final PageController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = PageController(
-      viewportFraction: 0.95,
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,32 +134,18 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
       return Column(
         children: [
           SizedBox(
-            height: 480, // Card compacto
-            child: PageView.builder(
-              controller: _controller,
-              // 💡 CORREÇÃO DO DRAWER: Muda a física para não capturar o gesto horizontal.
-              // Isso permite que o Drawer do Scaffold volte a abrir normalmente com o swipe.
-              physics: const NeverScrollableScrollPhysics(), 
+            height: 440, // Altura perfeita e compacta para o card mobile
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(), // Scroll nativo e fluido
               itemCount: cards.length,
               itemBuilder: (context, index) {
-                return AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context, child) {
-                    double value = 1.0;
-
-                    if (_controller.position.haveDimensions) {
-                      value = (_controller.page! - index).abs();
-                      value = (1 - (value * 0.18)).clamp(0.85, 1.0);
-                    }
-
-                    return Transform.scale(
-                      scale: value,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
-                        child: cards[index],
-                      ),
-                    );
-                  },
+                // 💡 SOLUÇÃO: Usar um container com largura definida no ListView
+                // resolve o conflito com o Drawer, pois o gesto não fica preso nas bordas
+                return Container(
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  margin: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
+                  child: cards[index],
                 );
               },
             ),
@@ -203,8 +168,7 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
             crossAxisCount: isDesktop ? 3 : 2,
             crossAxisSpacing: AppSpacing.md,
             mainAxisSpacing: AppSpacing.md,
-            // 🛠️ Medida corrigida para Web para deixar tudo próximo e compacto
-            mainAxisExtent: isDesktop ? 460 : 490, 
+            mainAxisExtent: isDesktop ? 460 : 490, // Layout compacto WEB
           ),
           itemBuilder: (context, index) => cards[index],
         );
@@ -272,7 +236,7 @@ class _ProjectCardState extends State<_ProjectCard> {
               ),
             ),
             
-            // 2. Bloco Único de Conteúdo Integrado (Sem vácuo ou espaços gigantes)
+            // 2. Bloco Único de Conteúdo Integrado
             Padding(
               padding: const EdgeInsets.all(AppSpacing.md),
               child: Column(
@@ -289,7 +253,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                   ),
                   const SizedBox(height: 6),
                   
-                  // DESCRIÇÃO (Exibe até 3 linhas sem cortar de forma feia)
+                  // DESCRIÇÃO (Compacta em até 3 linhas)
                   Text(
                     widget.description,
                     maxLines: 3,
@@ -302,7 +266,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                   ),
                   const SizedBox(height: 12),
                   
-                  // 🛠️ CHIPS DE TECNOLOGIAS (Posicionados abaixo da descrição)
+                  // CHIPS DE TECNOLOGIAS (Abaixo da descrição)
                   Wrap(
                     spacing: 6, 
                     runSpacing: 6, 
@@ -329,7 +293,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                   ),
                   const SizedBox(height: 16),
                   
-                  // BOTÕES DE AÇÃO (Colados de forma compacta e responsiva)
+                  // BOTÕES DE AÇÃO
                   Row(
                     children: [
                       Expanded(
