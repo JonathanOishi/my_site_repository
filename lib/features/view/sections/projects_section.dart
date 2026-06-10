@@ -155,7 +155,8 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
       return Column(
         children: [
           SizedBox(
-            height: 540, 
+            // Altura dinâmica para o carrossel mobile não quebrar
+            height: 620, 
             child: PageView.builder(
               controller: _controller,
               physics: const BouncingScrollPhysics(),
@@ -201,7 +202,9 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
             crossAxisCount: isDesktop ? 3 : 2,
             crossAxisSpacing: AppSpacing.md,
             mainAxisSpacing: AppSpacing.md,
-            mainAxisExtent: 560, 
+            // 🛠️ Removemos a limitação estática de 560 de altura. 
+            // Agora o grid se adapta organicamente ao tamanho real do conteúdo.
+            mainAxisExtent: isDesktop ? 640 : 680, 
           ),
           itemBuilder: (context, index) => cards[index],
         );
@@ -255,6 +258,7 @@ class _ProjectCardState extends State<_ProjectCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start, 
           children: [
+            // 1. Imagem do Projeto
             AspectRatio(
               aspectRatio: 16 / 10,
               child: ClipRRect(
@@ -267,12 +271,37 @@ class _ProjectCardState extends State<_ProjectCard> {
                 ),
               ),
             ),
+            
+            // 2. Conteúdo Textual e Elementos
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(AppSpacing.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // TÍTULO
+                    Text(
+                      widget.title,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    
+                    // DESCRIÇÃO (Sem Expanded bloqueando para não criar vácuo)
+                    Text(
+                      widget.description,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        height: 1.4,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    // 🛠️ CHIPS DE TECNOLOGIAS (Posicionados agora abaixo da descrição)
                     Wrap(
                       spacing: 6, 
                       runSpacing: 6, 
@@ -297,33 +326,12 @@ class _ProjectCardState extends State<_ProjectCard> {
                         );
                       }).toList(),
                     ),
-                    const SizedBox(height: 14),
                     
-                    Text(
-                      widget.title,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
+                    // O Spacer aqui serve unicamente para empurrar os botões 
+                    // de ação para a base do card de forma elegante.
+                    const Spacer(),
                     
-                    Text(
-                      widget.description,
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        height: 1.4,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                    
-                    // 💡 O Spacer garante que os botões fiquem alinhados embaixo,
-                    // empurrando o Row para o fim do card independente do tamanho do texto.
-                    const Spacer(), 
-                    const SizedBox(height: 12),
-                    
+                    // BOTÕES DE AÇÃO (Preview e Código colados de forma coesa)
                     Row(
                       children: [
                         Expanded(
@@ -349,7 +357,7 @@ class _ProjectCardState extends State<_ProjectCard> {
         ),
       ),
     );
-  } // 🛠️ CORRIGIDO: Removido o ponto e vírgula e parêntese extra que travava o código.
+  } 
 }
 
 class _SwipeIndicator extends StatefulWidget {
