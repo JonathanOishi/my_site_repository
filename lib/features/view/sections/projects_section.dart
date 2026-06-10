@@ -155,8 +155,8 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
       return Column(
         children: [
           SizedBox(
-            // Altura dinâmica para o carrossel mobile não quebrar
-            height: 620, 
+            // 🛠️ Altura reduzida no mobile para aproximar os cards e remover o vácuo
+            height: 480, 
             child: PageView.builder(
               controller: _controller,
               physics: const BouncingScrollPhysics(),
@@ -202,9 +202,8 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
             crossAxisCount: isDesktop ? 3 : 2,
             crossAxisSpacing: AppSpacing.md,
             mainAxisSpacing: AppSpacing.md,
-            // 🛠️ Removemos a limitação estática de 560 de altura. 
-            // Agora o grid se adapta organicamente ao tamanho real do conteúdo.
-            mainAxisExtent: isDesktop ? 640 : 680, 
+            // 🛠️ Reduzido de 640 para 460/490 para compactar todo o bloco no GridView desktop/tablet
+            mainAxisExtent: isDesktop ? 460 : 490, 
           ),
           itemBuilder: (context, index) => cards[index],
         );
@@ -272,85 +271,82 @@ class _ProjectCardState extends State<_ProjectCard> {
               ),
             ),
             
-            // 2. Conteúdo Textual e Elementos
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.md),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // TÍTULO
-                    Text(
-                      widget.title,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
-                      ),
+            // 2. Bloco Único de Conteúdo Integrado (Sem Expanded ou Spacers intermediários)
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // TÍTULO
+                  Text(
+                    widget.title,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.textPrimary,
                     ),
-                    const SizedBox(height: 8),
-                    
-                    // DESCRIÇÃO (Sem Expanded bloqueando para não criar vácuo)
-                    Text(
-                      widget.description,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        height: 1.4,
-                        color: AppColors.textSecondary,
-                      ),
+                  ),
+                  const SizedBox(height: 6),
+                  
+                  // DESCRIÇÃO (Exibe até 3 linhas de forma elegante e coesa)
+                  Text(
+                    widget.description,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      height: 1.4,
+                      color: AppColors.textSecondary,
                     ),
-                    const SizedBox(height: 16),
-                    
-                    // 🛠️ CHIPS DE TECNOLOGIAS (Posicionados agora abaixo da descrição)
-                    Wrap(
-                      spacing: 6, 
-                      runSpacing: 6, 
-                      children: widget.technologies.map((tech) {
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 5,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            tech,
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.primary,
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                    
-                    // O Spacer aqui serve unicamente para empurrar os botões 
-                    // de ação para a base do card de forma elegante.
-                    const Spacer(),
-                    
-                    // BOTÕES DE AÇÃO (Preview e Código colados de forma coesa)
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text("Preview"),
+                  ),
+                  const SizedBox(height: 12),
+                  
+                  // 🛠️ CHIPS DE TECNOLOGIAS (Movido para baixo da descrição)
+                  Wrap(
+                    spacing: 6, 
+                    runSpacing: 6, 
+                    children: widget.technologies.map((tech) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          tech,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primary,
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {},
-                            child: const Text("Código"),
-                          ),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // BOTÕES DE AÇÃO (Colados logo abaixo das tecnologias)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          child: const Text("Preview"),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {},
+                          child: const Text("Código"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],
