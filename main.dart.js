@@ -55804,7 +55804,7 @@ A.fg.prototype={
 G(){return"ModifierKey."+this.b}}
 A.wc.prototype={
 ga9W(){var s,r,q=A.u(t.xS,t.Di)
-for(s=0;s<9;++s){r=B.lU[s]
+for(s=0;s<9;++s){r=B.lV[s]
 if(this.a9d(r))q.m(0,r,B.cH)}return q}}
 A.j2.prototype={}
 A.a0e.prototype={
@@ -55842,7 +55842,7 @@ i=$.cd
 if(i!=null)i.$1(new A.aQ(r,q,"services library",j,p,!1))}}return!1},
 a2B(a1){var s,r,q,p,o,n,m,l,k,j,i,h,g=a1.c,f=g.ga9W(),e=t.v3,d=A.u(e,t.F),c=A.aD(e),b=this.d,a=A.dQ(new A.b1(b,A.k(b).h("b1<1>")),e),a0=a1 instanceof A.kz
 if(a0)a.E(0,g.ghL())
-for(s=g.a,r=null,q=0;q<9;++q){p=B.lU[q]
+for(s=g.a,r=null,q=0;q<9;++q){p=B.lV[q]
 o=$.ap0()
 n=o.i(0,new A.cp(p,B.bv))
 if(n==null)continue
@@ -68566,8 +68566,8 @@ return r.a.a<768?A.bM(A.c([q,B.jz,p],o),B.C,B.p,B.q):A.cJ(A.c([q,p],o),B.x,B.dT,
 A.Mx.prototype={
 I(a){var s
 if(A.b5(a,null,t.w).w.a.a<768){s=t.A_
-s=A.U(new A.a1(B.lV,new A.aaM(a),s),s.h("an.E"))
-return A.bM(A.c([new A.k9(A.agc(A.cJ(s,B.x,B.p,B.q,0),B.y3,B.aj),null),B.ci,B.Tw],t.p),B.x,B.p,B.q)}return A.afM(new A.aaN(B.lV))}}
+s=A.U(new A.a1(B.lU,new A.aaM(a),s),s.h("an.E"))
+return A.bM(A.c([new A.k9(A.agc(A.cJ(s,B.x,B.p,B.q,0),B.y3,B.aj),null),B.ci,B.Tw],t.p),B.x,B.p,B.q)}return A.afM(new A.aaN(B.lU))}}
 A.aaM.prototype={
 $1(a){var s=null
 return A.bf(s,a,B.m,s,s,s,s,s,B.Bl,s,s,s,A.b5(this.a,s,t.w).w.a.a*0.85)},
@@ -73074,6 +73074,13 @@ B.F4=s([],t.n)
 B.F_=s([],t.t)
 B.lT=s([],t.ee)
 B.Fa=s([],t.XS)
+B.Fy=s(["Kotlin","MVVM","Firebase","Retrofit","REST API","FCM","AdMob","Material 3"],t.s)
+B.Tl=new A.fu("MyFinancy","Aplicativo de controle financeiro pessoal que permite gerenciar receitas, despesas e acompanhar o saldo de forma simples e organizada, com autentica\xe7\xe3o de usu\xe1rios e sincroniza\xe7\xe3o em nuvem.","assets/my_financy.png",B.Fy,null)
+B.ES=s(["Flutter","Dart","Provider","MVVM","Firebase Auth","Firestore","Geolocator","Image Picker","Slidable","Dotenv"],t.s)
+B.Tm=new A.fu("GeoTasks","Aplicativo de gerenciamento de tarefas desenvolvido em Flutter, permitindo criar, editar, concluir e organizar tarefas com sincroniza\xe7\xe3o em tempo real, autentica\xe7\xe3o de usu\xe1rios e integra\xe7\xe3o com geolocaliza\xe7\xe3o.","assets/geo_tasks.png",B.ES,null)
+B.Fv=s(["Flutter","Dart","Material Design 3","Responsive","Componentiza\xe7\xe3o","Animation","Design System","GitHub Pages"],t.s)
+B.Tk=new A.fu("Web Site Portifolio","Portf\xf3lio profissional desenvolvido em Flutter Web para apresentar minha trajet\xf3ria, forma\xe7\xe3o acad\xeamica, experi\xeancia profissional, stack tecnol\xf3gica e projetos desenvolvidos.","assets/port_web.png",B.Fv,null)
+B.lU=s([B.Tl,B.Tm,B.Tk],A.ak("w<fu>"))
 B.MF=new A.de("Minha ",null,null,B.Z,null,null,null,null,null,null,null)
 B.MK=new A.de("Trajetoria",null,null,B.Z,null,null,null,null,null,null,B.cZ)
 B.Fe=s([B.MF,B.MK],t.VO)
@@ -73106,14 +73113,7 @@ B.iQ=new A.fg(5,"numLockModifier")
 B.iR=new A.fg(6,"scrollLockModifier")
 B.iS=new A.fg(7,"functionModifier")
 B.qZ=new A.fg(8,"symbolModifier")
-B.lU=s([B.cL,B.cM,B.cN,B.cO,B.iP,B.iQ,B.iR,B.iS,B.qZ],A.ak("w<fg>"))
-B.Fy=s(["Kotlin","MVVM","Firebase","Retrofit","REST API","FCM","AdMob","Material 3"],t.s)
-B.Tl=new A.fu("MyFinancy","Aplicativo de controle financeiro pessoal que permite gerenciar receitas, despesas e acompanhar o saldo de forma simples e organizada, com autentica\xe7\xe3o de usu\xe1rios e sincroniza\xe7\xe3o em nuvem.","assets/my_financy.png",B.Fy,null)
-B.ES=s(["Flutter","Dart","Provider","MVVM","Firebase Auth","Firestore","Geolocator","Image Picker","Slidable","Dotenv"],t.s)
-B.Tm=new A.fu("GeoTasks","Aplicativo de gerenciamento de tarefas desenvolvido em Flutter, permitindo criar, editar, concluir e organizar tarefas com sincroniza\xe7\xe3o em tempo real, autentica\xe7\xe3o de usu\xe1rios e integra\xe7\xe3o com geolocaliza\xe7\xe3o.","assets/geo_tasks.png",B.ES,null)
-B.Fv=s(["Flutter","Dart","Material Design 3","Responsive","Componentiza\xe7\xe3o","Animation","Design System","GitHub Pages"],t.s)
-B.Tk=new A.fu("Web Site Portifolio","Portf\xf3lio profissional desenvolvido em Flutter Web para apresentar minha trajet\xf3ria, forma\xe7\xe3o acad\xeamica, experi\xeancia profissional, stack tecnol\xf3gica e projetos desenvolvidos. A aplica\xe7\xe3o possui layout responsivo para desktop, tablet e mobile, navega\xe7\xe3o fluida entre se\xe7\xf5es e arquitetura organizada para facilitar manuten\xe7\xe3o e evolu\xe7\xe3o cont\xednua.","assets/port_web.png",B.Fv,null)
-B.lV=s([B.Tl,B.Tm,B.Tk],A.ak("w<fu>"))
+B.lV=s([B.cL,B.cM,B.cN,B.cO,B.iP,B.iQ,B.iR,B.iS,B.qZ],A.ak("w<fg>"))
 B.iy=s([!0,!1],t.HZ)
 B.wS=new A.j(!0,B.h,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.MO=new A.de("Stack ",null,null,B.Z,null,null,null,null,null,null,B.wS)
