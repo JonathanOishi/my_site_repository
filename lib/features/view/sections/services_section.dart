@@ -27,7 +27,6 @@ class ServicesSection extends StatelessWidget {
       desktop: 1240,
     );
 
-    // Lista com os dados estruturados dos cards de serviço
     final services = [
       _ServiceData(
         icon: Icons.phone_android_rounded,
@@ -111,8 +110,6 @@ class ServicesSection extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 48),
-
-                // Renderização condicional baseada na responsividade (evitando GridView travado no Desktop)
                 Responsive.responsive<Widget>(
                   context: context,
                   mobile: Column(
@@ -172,7 +169,6 @@ class ServicesSection extends StatelessWidget {
   }
 }
 
-// Modelo de dados simples para organizar os serviços
 class _ServiceData {
   final IconData icon;
   final String title;
@@ -193,10 +189,7 @@ class _ServiceCard extends StatefulWidget {
   final _ServiceData data;
   final VoidCallback onPressed;
 
-  const _ServiceCard({
-    required this.data,
-    required this.onPressed,
-  });
+  const _ServiceCard({required this.data, required this.onPressed});
 
   @override
   State<_ServiceCard> createState() => _ServiceCardState();
@@ -208,105 +201,96 @@ class _ServiceCardState extends State<_ServiceCard> {
   @override
   Widget build(BuildContext context) {
     const buttonColor = Color(0xFF1EA69A);
+    final isMobile = Responsive.isMobile(context);
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => isHovered = true),
-      onExit: (_) => setState(() => isHovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.all(28),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceAlt,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: isHovered
-                ? buttonColor.withValues(alpha: .40)
-                : AppColors.border,
-            width: isHovered ? 1.5 : 1.0,
-          ),
-          boxShadow: isHovered
-              ? [
-                  BoxShadow(
-                    color: buttonColor.withValues(alpha: 0.06),
-                    blurRadius: 24,
-                    offset: const Offset(0, 12),
-                  ),
-                ]
-              : [],
+    final cardContent = AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      padding: const EdgeInsets.all(28),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceAlt,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isHovered ? buttonColor.withOpacity(0.40) : AppColors.border,
+          width: isHovered ? 1.5 : 1.0,
         ),
-        // Column configurada com MainAxisSize.min para colapsar o espaço excedente
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: isHovered
-                    ? buttonColor
-                    : buttonColor.withValues(alpha: .10),
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Icon(
-                widget.data.icon,
-                color: isHovered ? Colors.white : buttonColor,
-                size: 22,
-              ),
+        boxShadow: isHovered
+            ? [
+                BoxShadow(
+                  color: buttonColor.withOpacity(0.06),
+                  blurRadius: 24,
+                  offset: const Offset(0, 12),
+                ),
+              ]
+            : [],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: isHovered ? buttonColor : buttonColor.withOpacity(0.10),
+              borderRadius: BorderRadius.circular(14),
             ),
-            const SizedBox(height: 20),
-            Text(
-              widget.data.title,
-              style: const TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
-              ),
+            child: Icon(
+              widget.data.icon,
+              color: isHovered ? Colors.white : buttonColor,
+              size: 22,
             ),
-            const SizedBox(height: 12),
-            Text(
-              widget.data.description,
-              style: const TextStyle(
-                fontSize: 13,
-                height: 1.5,
-                color: AppColors.textSecondary,
-              ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            widget.data.title,
+            style: const TextStyle(
+              fontSize: 19,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
             ),
-            const SizedBox(height: 24),
-            // Mapeamento direto das tags curtas sem Expanded artificial intermediário
-            ...widget.data.features.map((feature) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.check_circle_rounded,
-                      color: buttonColor,
-                      size: 16,
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        feature,
-                        style: const TextStyle(
-                          color: AppColors.textPrimary,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            widget.data.description,
+            style: const TextStyle(
+              fontSize: 13,
+              height: 1.5,
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 24),
+          ...widget.data.features.map(
+            (feature) => Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.check_circle_rounded,
+                    color: buttonColor,
+                    size: 16,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      feature,
+                      style: const TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                  ],
-                ),
-              );
-            }),
-            const SizedBox(
-              height: 24,
-            ), // Espaçamento fixo aproximando o botão dos checks
-            SizedBox(
-              width: double.infinity,
-              height: 46,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            height: 46,
+            child: Material(
+              color: Colors.transparent,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: buttonColor,
@@ -326,9 +310,17 @@ class _ServiceCardState extends State<_ServiceCard> {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
+    );
+
+    if (isMobile) return cardContent;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: cardContent,
     );
   }
 }

@@ -52,26 +52,26 @@ class _HomePageState extends State<HomePage> {
     _scrollToSection(id);
   }
 
+  // No seu HomePage.dart
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.background,
-      resizeToAvoidBottomInset: true, // Corrigido para true
+      resizeToAvoidBottomInset: true, // ESSENCIAL
       drawer: MobileNavDrawer(
         items: homeNavItems,
         onItemTap: _onDrawerItemTap,
       ),
+      // Usamos um Stack apenas se necessário, caso contrário, Column é mais seguro
       body: Column(
         children: [
-          // Navbar fixo no topo, fora do scroll
+          // O Navbar deve ser o primeiro item e não estar dentro de um SingleChildScrollView
           Navbar(
             items: homeNavItems,
             onItemTap: _scrollToSection,
             onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
           ),
-
-          // O resto da página rola livremente
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -80,44 +80,7 @@ class _HomePageState extends State<HomePage> {
                     key: _sectionKeys[HomeSectionIds.hero],
                     child: const HeroSection(),
                   ),
-                  KeyedSubtree(
-                    key: _sectionKeys[HomeSectionIds.history],
-                    child: const MyHistory(),
-                  ),
-                  KeyedSubtree(
-                    key: _sectionKeys[HomeSectionIds.stack],
-                    child: const TechGrid(),
-                  ),
-                  KeyedSubtree(
-                    key: _sectionKeys[HomeSectionIds.experience],
-                    child: const ExperienceSection(),
-                  ),
-                  KeyedSubtree(
-                    key: _sectionKeys[HomeSectionIds.education],
-                    child: const EducationSection(),
-                  ),
-                  KeyedSubtree(
-                    key: _sectionKeys[HomeSectionIds.projects],
-                    child: const ProjectsSection(),
-                  ),
-                  KeyedSubtree(
-                    key: _sectionKeys[HomeSectionIds.service],
-                    child: ServicesSection(
-                      onContactPressed: () =>
-                          _scrollToSection(HomeSectionIds.contact),
-                    ),
-                  ),
-                  KeyedSubtree(
-                    key: _sectionKeys[HomeSectionIds.contact],
-                    child: const ContactSection(),
-                  ),
-                  KeyedSubtree(
-                    key: _sectionKeys[HomeSectionIds.footer],
-                    child: FooterSection(
-                      onScrollToTop: () =>
-                          _scrollToSection(HomeSectionIds.hero),
-                    ),
-                  ),
+                  // ... (suas outras seções aqui)
                 ],
               ),
             ),
