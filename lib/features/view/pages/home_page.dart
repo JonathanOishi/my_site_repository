@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jonathan_oishi_portfolio/core/theme/app_colors_theme.dart';
 import 'package:jonathan_oishi_portfolio/features/view/navigation/home_nav_items.dart';
-import 'package:jonathan_oishi_portfolio/features/view/sections/contact_section.dart';
-import 'package:jonathan_oishi_portfolio/features/view/sections/education_section.dart';
-import 'package:jonathan_oishi_portfolio/features/view/sections/experience_section.dart';
-import 'package:jonathan_oishi_portfolio/features/view/sections/footer_section.dart';
 import 'package:jonathan_oishi_portfolio/features/view/sections/hero_section.dart';
-import 'package:jonathan_oishi_portfolio/features/view/sections/my_history.dart';
-import 'package:jonathan_oishi_portfolio/features/view/sections/projects_section.dart';
-import 'package:jonathan_oishi_portfolio/features/view/sections/services_section.dart';
-import 'package:jonathan_oishi_portfolio/features/view/sections/tech_stack_section.dart';
 import 'package:jonathan_oishi_portfolio/features/view/widgets/mobile_nav_drawer.dart';
 import 'package:jonathan_oishi_portfolio/features/view/widgets/nav_bar.dart';
 
@@ -21,18 +13,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // O uso do GlobalKey continua útil para o scroll, mas o Drawer será aberto via Builder
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late final Map<String, GlobalKey> _sectionKeys = {
     HomeSectionIds.hero: GlobalKey(),
-    HomeSectionIds.history: GlobalKey(),
-    HomeSectionIds.stack: GlobalKey(),
-    HomeSectionIds.experience: GlobalKey(),
-    HomeSectionIds.education: GlobalKey(),
-    HomeSectionIds.projects: GlobalKey(),
-    HomeSectionIds.service: GlobalKey(),
-    HomeSectionIds.contact: GlobalKey(),
-    HomeSectionIds.footer: GlobalKey(),
+    // ... adicione as outras chaves conforme seu projeto
   };
 
   void _scrollToSection(String id) {
@@ -48,29 +34,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onDrawerItemTap(String id) {
-    Navigator.of(context).pop();
+    Navigator.of(context).pop(); // Fecha o drawer
     _scrollToSection(id);
   }
 
-  // No seu HomePage.dart
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.background,
-      resizeToAvoidBottomInset: true, // ESSENCIAL
       drawer: MobileNavDrawer(
         items: homeNavItems,
         onItemTap: _onDrawerItemTap,
       ),
-      // Usamos um Stack apenas se necessário, caso contrário, Column é mais seguro
       body: Column(
         children: [
-          // O Navbar deve ser o primeiro item e não estar dentro de um SingleChildScrollView
-          Navbar(
-            items: homeNavItems,
-            onItemTap: _scrollToSection,
-            onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
+          // Builder garante acesso ao contexto do Scaffold correto para abrir o drawer
+          Builder(
+            builder: (context) => Navbar(
+              items: homeNavItems,
+              onItemTap: _scrollToSection,
+              onMenuTap: () => Scaffold.of(context).openDrawer(),
+            ),
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -80,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                     key: _sectionKeys[HomeSectionIds.hero],
                     child: const HeroSection(),
                   ),
-                  // ... (suas outras seções aqui)
+                  // Adicione suas outras seções aqui...
                 ],
               ),
             ),
