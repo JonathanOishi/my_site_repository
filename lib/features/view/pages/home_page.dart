@@ -23,7 +23,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // Dicionário de chaves globais mapeadas para cada seção da sua página única (Single Page)
   late final Map<String, GlobalKey> _sectionKeys = {
     HomeSectionIds.hero: GlobalKey(),
     HomeSectionIds.history: GlobalKey(),
@@ -36,126 +35,94 @@ class _HomePageState extends State<HomePage> {
     HomeSectionIds.footer: GlobalKey(),
   };
 
-  // Função centralizada de Scroll dinâmico com correção de sincronismo de frames
   void _scrollToSection(String id) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final key = _sectionKeys[id];
-      final context = key?.currentContext;
-
-      if (context != null) {
-        Scrollable.ensureVisible(
-          context,
-          alignment:
-              0.0, // Garante que o topo do widget alinhe com o topo da tela
-          duration: const Duration(
-            milliseconds: 650,
-          ), // Velocidade de transição fluida
-          curve: Curves
-              .easeInOutCubic, // Curva suave de aceleração e desaceleração
-        );
-      }
-    });
+    final key = _sectionKeys[id];
+    final context = key?.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 650),
+        curve: Curves.easeInOutCubic,
+      );
+    }
   }
 
   void _onDrawerItemTap(String id) {
-    Navigator.of(context).pop(); // Fecha o menu lateral no Mobile
+    Navigator.of(context).pop();
     _scrollToSection(id);
   }
 
   @override
   Widget build(BuildContext context) {
-    final systemPadding = MediaQuery.of(context).padding;
-
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.background,
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true, // Corrigido para true
       drawer: MobileNavDrawer(
         items: homeNavItems,
         onItemTap: _onDrawerItemTap,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Preenchimento de segurança da barra superior do sistema operacional
-            Container(
-              height: systemPadding.top,
-              color: AppColors.background,
-            ),
+      body: Column(
+        children: [
+          // Navbar fixo no topo, fora do scroll
+          Navbar(
+            items: homeNavItems,
+            onItemTap: _scrollToSection,
+            onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
+          ),
 
-            // Barra de navegação principal (Menu Superior)
-            Navbar(
-              items: homeNavItems,
-              onItemTap: _scrollToSection,
-              onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
-            ),
-
-            // 1. Seção Principal (Apresentação / Hero)
-            KeyedSubtree(
-              key: _sectionKeys[HomeSectionIds.hero],
-              child: const HeroSection(),
-            ),
-
-            // 2. Sobre Mim / História
-            KeyedSubtree(
-              key: _sectionKeys[HomeSectionIds.history],
-              child: const MyHistory(),
-            ),
-
-            // 3. Tecnologias / Tech Stack Grid
-            KeyedSubtree(
-              key: _sectionKeys[HomeSectionIds.stack],
-              child: const TechGrid(),
-            ),
-
-            // 4. Experiência Profissional
-            KeyedSubtree(
-              key: _sectionKeys[HomeSectionIds.experience],
-              child: const ExperienceSection(),
-            ),
-
-            // 5. Educação / Formação Acadêmica
-            KeyedSubtree(
-              key: _sectionKeys[HomeSectionIds.education],
-              child: const EducationSection(),
-            ),
-
-            // 6. Projetos Desenvolvidos (MyFinancy, GeoTasks, etc.)
-            KeyedSubtree(
-              key: _sectionKeys[HomeSectionIds.projects],
-              child: const ProjectsSection(),
-            ),
-
-            // 7. Orçamentos e Serviços (Cards que direcionam para o contato)
-            KeyedSubtree(
-              key: _sectionKeys[HomeSectionIds.service],
-              child: ServicesSection(
-                onContactPressed: () =>
-                    _scrollToSection(HomeSectionIds.contact),
+          // O resto da página rola livremente
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  KeyedSubtree(
+                    key: _sectionKeys[HomeSectionIds.hero],
+                    child: const HeroSection(),
+                  ),
+                  KeyedSubtree(
+                    key: _sectionKeys[HomeSectionIds.history],
+                    child: const MyHistory(),
+                  ),
+                  KeyedSubtree(
+                    key: _sectionKeys[HomeSectionIds.stack],
+                    child: const TechGrid(),
+                  ),
+                  KeyedSubtree(
+                    key: _sectionKeys[HomeSectionIds.experience],
+                    child: const ExperienceSection(),
+                  ),
+                  KeyedSubtree(
+                    key: _sectionKeys[HomeSectionIds.education],
+                    child: const EducationSection(),
+                  ),
+                  KeyedSubtree(
+                    key: _sectionKeys[HomeSectionIds.projects],
+                    child: const ProjectsSection(),
+                  ),
+                  KeyedSubtree(
+                    key: _sectionKeys[HomeSectionIds.service],
+                    child: ServicesSection(
+                      onContactPressed: () =>
+                          _scrollToSection(HomeSectionIds.contact),
+                    ),
+                  ),
+                  KeyedSubtree(
+                    key: _sectionKeys[HomeSectionIds.contact],
+                    child: const ContactSection(),
+                  ),
+                  KeyedSubtree(
+                    key: _sectionKeys[HomeSectionIds.footer],
+                    child: FooterSection(
+                      onScrollToTop: () =>
+                          _scrollToSection(HomeSectionIds.hero),
+                    ),
+                  ),
+                ],
               ),
             ),
-
-            // 8. Seção de Formulário / Informações de Contato
-            KeyedSubtree(
-              key: _sectionKeys[HomeSectionIds.contact],
-              child: const ContactSection(),
-            ),
-
-            // 9. Rodapé Técnico Melhorado (Com link para o topo e logo Flutter)
-            KeyedSubtree(
-              key: _sectionKeys[HomeSectionIds.footer],
-              child: FooterSection(
-                onScrollToTop: () => _scrollToSection(HomeSectionIds.hero),
-              ),
-            ),
-
-            // Preenchimento de segurança da barra inferior de gestos
-            Container(
-              height: systemPadding.bottom,
-              color: AppColors.background,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
