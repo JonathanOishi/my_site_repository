@@ -58,7 +58,6 @@ class ProjectsSection extends StatelessWidget {
 
 class _Header extends StatelessWidget {
   final double titleSize;
-
   const _Header({required this.titleSize});
 
   @override
@@ -82,22 +81,15 @@ class _Header extends StatelessWidget {
       ),
     );
 
-    final link = Text(
+    final link = const Text(
       'Projetos',
-      style: const TextStyle(
-        color: AppColors.primary,
-        fontWeight: FontWeight.w600,
-      ),
+      style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
     );
 
     return isMobile
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              title,
-              const SizedBox(height: 6),
-              link,
-            ],
+            children: [title, const SizedBox(height: 6), link],
           )
         : Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,73 +106,37 @@ class _ProjectsGrid extends StatelessWidget {
     final cards = const [
       _ProjectCard(
         title: 'MyFinancy',
-        description:
-            'Aplicativo de controle financeiro pessoal que permite gerenciar receitas, despesas e acompanhar o saldo de forma simples e organizada, com autenticação de usuários e sincronização em nuvem.',
+        description: '...',
         imageLink: 'assets/my_financy.png',
-        technologies: [
-          'Kotlin',
-          'MVVM',
-          'Firebase',
-          'Retrofit',
-          'REST API',
-          'FCM',
-          'AdMob',
-          'Material 3', // Se houver mais de 8, o .take(8) vai cortar automaticamente
-        ],
+        technologies: ['Kotlin', 'MVVM', 'Firebase'],
       ),
       _ProjectCard(
         title: 'GeoTasks',
-        description:
-            'Aplicativo de gerenciamento de tarefas desenvolvido em Flutter, permitindo criar, editar, concluir e organizar tarefas com sincronização em tempo real, autenticação de usuários e integração com geolocalização.',
+        description: '...',
         imageLink: 'assets/geo_tasks.png',
-        technologies: [
-          'Flutter',
-          'Dart',
-          'Provider',
-          'MVVM',
-          'Firebase Auth',
-          'Firestore',
-          'Geolocator',
-          'Image Picker',
-          'Slidable',
-          'Dotenv',
-        ],
+        technologies: ['Flutter', 'Dart', 'Provider'],
       ),
       _ProjectCard(
         title: 'Web Site Portifolio',
-        description:
-            'Portfólio profissional desenvolvido em Flutter Web para apresentar minha trajetória, formação acadêmica, experiência profissional, stack tecnológica e projetos desenvolvidos. A aplicação possui layout responsivo para desktop, tablet e mobile, navegação fluida entre seções e arquitetura organizada para facilitar manutenção e evolução contínua.',
+        description: '...',
         imageLink: 'assets/port_web.png',
-        technologies: [
-          'Flutter',
-          'Dart',
-          'Material Design 3',
-          'Responsive',
-          'Componentização',
-          'Animation',
-          'Design System',
-          'GitHub Pages',
-        ],
+        technologies: ['Flutter', 'Dart', 'Design System'],
       ),
     ];
 
-    final isMobile = Responsive.isMobile(context);
-
-    if (isMobile) {
+    if (Responsive.isMobile(context)) {
       return Column(
         children: [
-          IntrinsicHeight(
-            child: SingleChildScrollView(
+          SizedBox(
+            height: 480, // Altura fixa para evitar conflito de hit-test
+            child: ListView.builder(
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
-              child: Row(
-                children: cards.map((card) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width * 0.85,
-                    margin: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
-                    child: card,
-                  );
-                }).toList(),
+              itemCount: cards.length,
+              itemBuilder: (context, index) => Container(
+                width: MediaQuery.of(context).size.width * 0.85,
+                margin: const EdgeInsets.only(right: 16),
+                child: cards[index],
               ),
             ),
           ),
@@ -193,7 +149,6 @@ class _ProjectsGrid extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isDesktop = constraints.maxWidth >= 1000;
-
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -202,7 +157,6 @@ class _ProjectsGrid extends StatelessWidget {
             crossAxisCount: isDesktop ? 3 : 2,
             crossAxisSpacing: AppSpacing.md,
             mainAxisSpacing: AppSpacing.md,
-            // Proporção perfeita para manter os botões alinhados na mesma linha horizontal na Web
             childAspectRatio: isDesktop ? 0.70 : 0.64,
           ),
           itemBuilder: (context, index) => cards[index],
@@ -213,9 +167,7 @@ class _ProjectsGrid extends StatelessWidget {
 }
 
 class _ProjectCard extends StatefulWidget {
-  final String title;
-  final String description;
-  final String imageLink;
+  final String title, description, imageLink;
   final List<String> technologies;
 
   const _ProjectCard({
@@ -239,7 +191,6 @@ class _ProjectCardState extends State<_ProjectCard> {
       onExit: (_) => setState(() => hover = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOut,
         decoration: BoxDecoration(
           color: AppColors.background,
           borderRadius: BorderRadius.circular(18),
@@ -247,7 +198,7 @@ class _ProjectCardState extends State<_ProjectCard> {
           boxShadow: hover
               ? [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.18),
+                    color: Colors.black.withOpacity(0.18),
                     blurRadius: 18,
                     offset: const Offset(0, 10),
                   ),
@@ -255,30 +206,22 @@ class _ProjectCardState extends State<_ProjectCard> {
               : [],
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. Imagem do Projeto
             AspectRatio(
               aspectRatio: 16 / 10,
               child: ClipRRect(
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(18),
                 ),
-                child: Image.asset(
-                  widget.imageLink,
-                  fit: BoxFit.cover,
-                ),
+                child: Image.asset(widget.imageLink, fit: BoxFit.cover),
               ),
             ),
-
-            // 2. Bloco de Conteúdo Expandido (Garante o alinhamento dos botões embaixo)
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(AppSpacing.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // TÍTULO
                     Text(
                       widget.title,
                       style: const TextStyle(
@@ -288,8 +231,6 @@ class _ProjectCardState extends State<_ProjectCard> {
                       ),
                     ),
                     const SizedBox(height: 6),
-
-                    // DESCRIÇÃO
                     Text(
                       widget.description,
                       maxLines: 3,
@@ -301,51 +242,40 @@ class _ProjectCardState extends State<_ProjectCard> {
                       ),
                     ),
                     const SizedBox(height: 12),
-
-                    // CHIPS DE TECNOLOGIAS (Limitado estritamente a 8 itens e 2 linhas de quebra)
                     Wrap(
                       spacing: 6,
                       runSpacing: 6,
-                      children: widget.technologies.take(8).map((tech) {
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 9,
-                            vertical: 5,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: .12),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            tech,
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.primary,
+                      children: widget.technologies
+                          .take(8)
+                          .map(
+                            (tech) => Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 9,
+                                vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withOpacity(0.12),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                tech,
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.primary,
+                                ),
+                              ),
                             ),
-                          ),
-                        );
-                      }).toList(),
+                          )
+                          .toList(),
                     ),
-
-                    // O Spacer empurra os botões para o final, alinhando-os horizontalmente em todos os cards
                     const Spacer(),
-                    const SizedBox(height: 12),
-
-                    // BOTÕES DE AÇÃO (Alinhamento horizontal perfeito)
                     Row(
                       children: [
                         Expanded(
                           child: SizedBox(
                             height: 40,
                             child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                textStyle: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
                               onPressed: () {},
                               child: const Text("Preview"),
                             ),
@@ -356,13 +286,6 @@ class _ProjectCardState extends State<_ProjectCard> {
                           child: SizedBox(
                             height: 40,
                             child: OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                textStyle: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
                               onPressed: () {},
                               child: const Text("Código"),
                             ),
@@ -381,44 +304,11 @@ class _ProjectCardState extends State<_ProjectCard> {
   }
 }
 
-class _SwipeIndicator extends StatefulWidget {
+class _SwipeIndicator extends StatelessWidget {
   const _SwipeIndicator();
-
   @override
-  State<_SwipeIndicator> createState() => _SwipeIndicatorState();
-}
-
-class _SwipeIndicatorState extends State<_SwipeIndicator>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _c;
-
-  @override
-  void initState() {
-    super.initState();
-    _c = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 900),
-    )..repeat(reverse: true);
-  }
-
-  @override
-  void dispose() {
-    _c.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _c,
-      child: const Text(
-        "← arraste para ver mais →",
-        style: TextStyle(
-          fontSize: 12,
-          color: Colors.grey,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => const Text(
+    "← arraste para ver mais →",
+    style: TextStyle(fontSize: 12, color: Colors.grey),
+  );
 }
