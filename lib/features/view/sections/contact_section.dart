@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/app_spacing.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/responsive.dart';
 import 'package:jonathan_oishi_portfolio/core/theme/app_colors_theme.dart';
+import 'package:url_launcher/url_launcher.dart'; // 1. Importação do url_launcher
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
@@ -34,32 +35,57 @@ class ContactSection extends StatelessWidget {
               horizontal: horizontalPadding,
               vertical: AppSpacing.xxxl,
             ),
-            child: Responsive.responsive<Widget>(
-              context: context,
-              mobile: const Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _ContactFormCard(),
-                  SizedBox(height: AppSpacing.xl),
-                  _ContactInfoCard(),
-                ],
-              ),
-              tablet: const Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(flex: 9, child: _ContactFormCard()),
-                  SizedBox(width: AppSpacing.xl),
-                  Expanded(flex: 8, child: _ContactInfoCard()),
-                ],
-              ),
-              desktop: const Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(flex: 9, child: _ContactFormCard()),
-                  SizedBox(width: AppSpacing.xl),
-                  Expanded(flex: 8, child: _ContactInfoCard()),
-                ],
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  'CONTATO',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primary,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Vamos conversar?',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textPrimary,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+                const SizedBox(height: 48),
+                Responsive.responsive<Widget>(
+                  context: context,
+                  mobile: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _ContactFormCard(),
+                      SizedBox(height: AppSpacing.xl),
+                      _ContactInfoCard(),
+                    ],
+                  ),
+                  tablet: const Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 9, child: _ContactFormCard()),
+                      SizedBox(width: AppSpacing.xl),
+                      Expanded(flex: 8, child: _ContactInfoCard()),
+                    ],
+                  ),
+                  desktop: const Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 9, child: _ContactFormCard()),
+                      SizedBox(width: AppSpacing.xl),
+                      Expanded(flex: 8, child: _ContactInfoCard()),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -93,27 +119,33 @@ class _ContactFormCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.lg),
           const _FieldLabel('SEU NOME'),
-          const _InputPlaceholder('Jonathan Oishi'),
+          const _InputPlaceholder(hint: 'Jonathan Oishi'),
           const SizedBox(height: AppSpacing.md),
           const _FieldLabel('EMAIL'),
-          const _InputPlaceholder('email@exemplo.com'),
+          const _InputPlaceholder(hint: 'email@exemplo.com'),
           const SizedBox(height: AppSpacing.md),
           const _FieldLabel('MENSAGEM'),
-          const _InputPlaceholder('Descreva seu projeto ou proposta...'),
+          const _InputPlaceholder(
+            hint: 'Descreva seu projeto ou proposta...',
+            isLongText: true,
+          ),
           const SizedBox(height: AppSpacing.lg),
           SizedBox(
             width: double.infinity,
+            height: 48,
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.textPrimary,
-                minimumSize: const Size(0, 48),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: const Text('Enviar Mensagem'),
+              child: const Text(
+                'Enviar Mensagem',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ],
@@ -125,75 +157,32 @@ class _ContactFormCard extends StatelessWidget {
 class _ContactInfoCard extends StatelessWidget {
   const _ContactInfoCard();
 
+  // 2. Função assíncrona criada para abrir o link com segurança
+  Future<void> _launchResumeURL() async {
+    final Uri url = Uri.parse(
+      'https://drive.google.com/file/d/1AWzEFf7GqzPoj22_7jDvKu8LZutuh6ay/view?usp=sharing',
+    );
+
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Não foi possível abrir o link: $url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Informacoes de Contato',
-          style: TextStyle(
-            color: AppColors.textSecondary,
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-          ),
+        const _InfoChip(
+          icon: Icons.alternate_email,
+          title: 'EMAIL',
+          value: 'jonathan_oishi@hotmail.com',
         ),
         const SizedBox(height: AppSpacing.md),
-        Responsive.responsive<Widget>(
-          context: context,
-          mobile: const Column(
-            children: [
-              _InfoChip(
-                icon: Icons.alternate_email,
-                title: 'EMAIL',
-                value: 'jonathan_oishi@hotmail.com',
-              ),
-              SizedBox(height: AppSpacing.md),
-              _InfoChip(
-                icon: Icons.location_on_outlined,
-                title: 'LOCALIDADE',
-                value: 'São Paulo',
-              ),
-            ],
-          ),
-          tablet: const Row(
-            children: [
-              Expanded(
-                child: _InfoChip(
-                  icon: Icons.alternate_email,
-                  title: 'EMAIL',
-                  value: 'jonathan_oishi@hotmail.com',
-                ),
-              ),
-              SizedBox(width: AppSpacing.md),
-              Expanded(
-                child: _InfoChip(
-                  icon: Icons.location_on_outlined,
-                  title: 'LOCALIDADE',
-                  value: 'São Paulo/SP',
-                ),
-              ),
-            ],
-          ),
-          desktop: const Row(
-            children: [
-              Expanded(
-                child: _InfoChip(
-                  icon: Icons.alternate_email,
-                  title: 'EMAIL',
-                  value: 'jonathan_oishi@hotmail.com',
-                ),
-              ),
-              SizedBox(width: AppSpacing.md),
-              Expanded(
-                child: _InfoChip(
-                  icon: Icons.location_on_outlined,
-                  title: 'LOCALIDADE',
-                  value: 'São Paulo/SP',
-                ),
-              ),
-            ],
-          ),
+        const _InfoChip(
+          icon: Icons.location_on_outlined,
+          title: 'LOCALIDADE',
+          value: 'São Paulo/SP',
         ),
         const SizedBox(height: AppSpacing.lg),
         Container(
@@ -224,15 +213,24 @@ class _ContactInfoCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
-              ElevatedButton.icon(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.textPrimary,
-                  minimumSize: const Size(double.infinity, 44),
+              SizedBox(
+                width: double.infinity,
+                height: 44,
+                child: ElevatedButton.icon(
+                  onPressed: _launchResumeURL, // Chamada da função aqui
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.textPrimary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  icon: const Icon(Icons.download_rounded),
+                  label: const Text(
+                    'Baixar Curriculo PDF',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
-                icon: const Icon(Icons.download_rounded),
-                label: const Text('Baixar Curriculo PDF'),
               ),
             ],
           ),
@@ -318,17 +316,24 @@ class _FieldLabel extends StatelessWidget {
 }
 
 class _InputPlaceholder extends StatelessWidget {
-  const _InputPlaceholder(this.hint);
+  const _InputPlaceholder({
+    required this.hint,
+    this.isLongText = false,
+  });
 
   final String hint;
+  final bool isLongText;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 44,
-      alignment: Alignment.centerLeft,
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+      height: isLongText ? 110 : 44,
+      alignment: isLongText ? Alignment.topLeft : Alignment.centerLeft,
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: isLongText ? AppSpacing.md : 0,
+      ),
       decoration: BoxDecoration(
         color: AppColors.input,
         borderRadius: BorderRadius.circular(10),

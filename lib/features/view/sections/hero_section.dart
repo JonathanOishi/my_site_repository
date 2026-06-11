@@ -5,6 +5,7 @@ import 'package:jonathan_oishi_portfolio/core/responsive/app_spacing.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/responsive.dart';
 import 'package:jonathan_oishi_portfolio/core/theme/app_colors_theme.dart';
 import 'package:jonathan_oishi_portfolio/features/view/widgets/particles/particles_back.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
@@ -34,7 +35,7 @@ class HeroSection extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           _HeroTextContent(),
-                          SizedBox(height: 40),
+                          const SizedBox(height: 40),
                           _HeroPhoto(),
                         ],
                       )
@@ -43,8 +44,8 @@ class HeroSection extends StatelessWidget {
                           Expanded(
                             child: _HeroTextContent(),
                           ),
-                          SizedBox(width: 48),
-                          Expanded(
+                          const SizedBox(width: 48),
+                          const Expanded(
                             child: _HeroPhoto(),
                           ),
                         ],
@@ -60,6 +61,22 @@ class HeroSection extends StatelessWidget {
 
 class _HeroTextContent extends StatelessWidget {
   const _HeroTextContent();
+
+  // Função para abrir o GitHub
+  Future<void> _launchGitHub() async {
+    final Uri url = Uri.parse('https://github.com/JonathanOishi');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Não foi possível abrir o link: $url');
+    }
+  }
+
+  // Função para abrir o LinkedIn
+  Future<void> _launchLinkedIn() async {
+    final Uri url = Uri.parse('https://www.linkedin.com/in/jonathanoishi/');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Não foi possível abrir o link: $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,17 +142,62 @@ class _HeroTextContent extends StatelessWidget {
 
           const SizedBox(height: AppSpacing.xl),
 
+          // Botões limpos (apenas texto), grandes e responsivos
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Botão do LinkedIn - Totalmente preenchido
               ElevatedButton(
-                onPressed: () {},
-                child: const Text('Ver Projetos'),
+                onPressed: _launchLinkedIn,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor:
+                      AppColors.background, // Texto escuro para alto contraste
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 36,
+                    vertical: 22,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                ),
+                child: const Text(
+                  'LinkedIn',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
+                  ),
+                ),
               ),
               const SizedBox(width: 16),
+
+              // Botão do GitHub - Estilo Outline (Vazado com Borda)
               OutlinedButton(
-                onPressed: () {},
-                child: const Text('Baixar Currículo'),
+                onPressed: _launchGitHub,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                  side: const BorderSide(
+                    color: AppColors.primary,
+                    width: 2,
+                  ), // Borda nítida de 2px
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 36,
+                    vertical: 22,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  'GitHub',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
+                  ),
+                ),
               ),
             ],
           ),

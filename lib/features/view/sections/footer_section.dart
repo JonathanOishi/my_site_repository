@@ -1,20 +1,28 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/app_spacing.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/responsive.dart';
 import 'package:jonathan_oishi_portfolio/core/theme/app_colors_theme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FooterSection extends StatelessWidget {
-  const FooterSection({super.key});
+  // Callback opcional para acionar o scroll até o topo da página
+  final VoidCallback? onScrollToTop;
+
+  const FooterSection({
+    super.key,
+    this.onScrollToTop,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Detecta o espaçamento da barra inferior do sistema (iPhone/Androids novos)
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     final horizontalPadding = Responsive.responsive<double>(
       context: context,
-      mobile: 20,
-      tablet: 40,
+      mobile: 24,
+      tablet: 48,
       desktop: 72,
     );
 
@@ -33,40 +41,46 @@ class FooterSection extends StatelessWidget {
         child: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: maxWidth),
           child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: horizontalPadding,
-              vertical: AppSpacing.xxl,
+            padding: EdgeInsets.fromLTRB(
+              horizontalPadding,
+              AppSpacing.xxl,
+              horizontalPadding,
+              AppSpacing.xl,
             ),
-            // Mudamos para uma Column para injetar o espaçamento de segurança no final de tudo
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Responsive.responsive<Widget>(
                   context: context,
-                  mobile: const Column(
+                  mobile: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _FooterBrand(),
-                      SizedBox(height: AppSpacing.xl),
-                      _FooterLinks(),
-                      SizedBox(height: AppSpacing.lg),
-                      _FooterSocial(),
+                      const _FooterBrand(),
+                      const SizedBox(height: AppSpacing.xl),
+                      const _FooterSocial(),
+                      if (onScrollToTop != null) ...[
+                        const SizedBox(height: AppSpacing.xl),
+                        _ScrollToTopButton(onPressed: onScrollToTop!),
+                      ],
                     ],
                   ),
                   tablet: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Expanded(
-                        flex: 4,
+                        flex: 5,
                         child: _FooterBrand(),
                       ),
                       const SizedBox(width: AppSpacing.xxl),
                       Expanded(
-                        flex: 5,
+                        flex: 4,
                         child: Row(
-                          children: const [
-                            Expanded(child: _FooterLinks()),
-                            Expanded(child: _FooterSocial()),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const _FooterSocial(),
+                            if (onScrollToTop != null)
+                              _ScrollToTopButton(onPressed: onScrollToTop!),
                           ],
                         ),
                       ),
@@ -76,24 +90,71 @@ class FooterSection extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Expanded(
-                        flex: 4,
+                        flex: 6,
                         child: _FooterBrand(),
                       ),
                       const SizedBox(width: AppSpacing.xxl),
                       Expanded(
-                        flex: 5,
+                        flex: 3,
                         child: Row(
-                          children: const [
-                            Expanded(child: _FooterLinks()),
-                            Expanded(child: _FooterSocial()),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const _FooterSocial(),
+                            if (onScrollToTop != null)
+                              _ScrollToTopButton(onPressed: onScrollToTop!),
                           ],
                         ),
                       ),
                     ],
                   ),
                 ),
-
-                // MUDANÇA AQUI: Adiciona o espaçamento dinâmico para a barra de navegação do celular
+                const SizedBox(height: 48),
+                const Divider(color: AppColors.border, thickness: 0.8),
+                const SizedBox(height: 24),
+                // Rodapé de créditos e assinatura de tecnologia utilizada
+                Responsive.responsive<Widget>(
+                  context: context,
+                  mobile: const Column(
+                    children: [
+                      Text(
+                        '© 2026 Jonathan Oishi. Todos os direitos reservados.',
+                        style: TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      _FlutterBadge(),
+                    ],
+                  ),
+                  tablet: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '© 2026 Jonathan Oishi. Todos os direitos reservados.',
+                        style: TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
+                      _FlutterBadge(),
+                    ],
+                  ),
+                  desktop: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '© 2026 Jonathan Oishi. Todos os direitos reservados.',
+                        style: TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
+                      _FlutterBadge(),
+                    ],
+                  ),
+                ),
                 if (bottomPadding > 0) SizedBox(height: bottomPadding),
               ],
             ),
@@ -116,44 +177,20 @@ class _FooterBrand extends StatelessWidget {
           'JONATHAN OISHI',
           style: TextStyle(
             color: AppColors.textPrimary,
-            fontSize: 28,
+            fontSize: 26,
             fontWeight: FontWeight.w800,
+            letterSpacing: -0.5,
           ),
         ),
         SizedBox(height: AppSpacing.sm),
         Text(
-          'Especialista em criar pontes digitais entre\nsolucoes complexas e solucoes mobile.',
+          'Engenheiro de Software focado e especializado no ecossistema Flutter e Dart. Desenvolvo aplicações robustas, fluidas e de alto desempenho para Android, iOS e Web a partir de uma única base de código, aliando Clean Architecture a designs inteligentes orientados à experiência do usuário.',
           style: TextStyle(
             color: AppColors.textSecondary,
-            fontSize: 12,
-            height: 1.5,
+            fontSize: 13,
+            height: 1.6,
           ),
         ),
-      ],
-    );
-  }
-}
-
-class _FooterLinks extends StatelessWidget {
-  const _FooterLinks();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'ACESSO RAPIDO',
-          style: TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        SizedBox(height: AppSpacing.md),
-        _LinkLabel('Inicio'),
-        _LinkLabel('Sobre Mim'),
-        _LinkLabel('Projetos'),
       ],
     );
   }
@@ -173,16 +210,23 @@ class _FooterSocial extends StatelessWidget {
             color: AppColors.textPrimary,
             fontSize: 11,
             fontWeight: FontWeight.w700,
+            letterSpacing: 1.0,
           ),
         ),
         SizedBox(height: AppSpacing.md),
         Row(
           children: [
-            _SocialDot(icon: Icons.code),
-            SizedBox(width: AppSpacing.sm),
-            _SocialDot(icon: Icons.alternate_email),
-            SizedBox(width: AppSpacing.sm),
-            _SocialDot(icon: Icons.camera_alt_outlined),
+            _SocialImageLink(
+              imagePath: 'assets/github_icon.png',
+              url: 'https://github.com/JonathanOishi',
+              tooltip: 'GitHub',
+            ),
+            SizedBox(width: AppSpacing.md),
+            _SocialImageLink(
+              imagePath: 'assets/link_icon.png',
+              url: 'https://www.linkedin.com/in/jonathanoishi/',
+              tooltip: 'LinkedIn',
+            ),
           ],
         ),
       ],
@@ -190,41 +234,155 @@ class _FooterSocial extends StatelessWidget {
   }
 }
 
-class _SocialDot extends StatelessWidget {
-  const _SocialDot({required this.icon});
+class _SocialImageLink extends StatefulWidget {
+  final String imagePath;
+  final String url;
+  final String tooltip;
 
-  final IconData icon;
+  const _SocialImageLink({
+    required this.imagePath,
+    required this.url,
+    required this.tooltip,
+  });
+
+  @override
+  State<_SocialImageLink> createState() => _SocialImageLinkState();
+}
+
+class _SocialImageLinkState extends State<_SocialImageLink> {
+  bool isHovered = false;
+
+  Future<void> _launchURL() async {
+    final Uri uri = Uri.parse(widget.url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw Exception('Não foi possível abrir o link: ${widget.url}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 28,
-      height: 28,
-      decoration: const BoxDecoration(
-        color: AppColors.surfaceSoft,
-        shape: BoxShape.circle,
+    const highlightColor = Color(0xFF1EA69A);
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: Tooltip(
+        message: widget.tooltip,
+        child: InkWell(
+          onTap: _launchURL,
+          borderRadius: BorderRadius.circular(28),
+          hoverColor: Colors.transparent,
+          splashColor: highlightColor.withValues(alpha: 0.3),
+          highlightColor: Colors.transparent,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: 56, // Aumentado de 48 para 56 para dar mais imponência
+            height: 56, // Aumentado de 48 para 56
+            padding: const EdgeInsets.all(
+              14,
+            ), // Padding proporcional para manter o ícone bonito
+            decoration: BoxDecoration(
+              color: isHovered
+                  ? highlightColor.withValues(alpha: 0.15)
+                  : AppColors.surfaceAlt,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: isHovered ? highlightColor : AppColors.border,
+                width: 1.5,
+              ),
+            ),
+            child: Image.asset(
+              widget.imagePath,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
       ),
-      child: Icon(icon, size: 14, color: AppColors.textPrimary),
     );
   }
 }
 
-class _LinkLabel extends StatelessWidget {
-  const _LinkLabel(this.label);
+class _ScrollToTopButton extends StatefulWidget {
+  final VoidCallback onPressed;
 
-  final String label;
+  const _ScrollToTopButton({required this.onPressed});
+
+  @override
+  State<_ScrollToTopButton> createState() => _ScrollToTopButtonState();
+}
+
+class _ScrollToTopButtonState extends State<_ScrollToTopButton> {
+  bool isHovered = false;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-      child: Text(
-        label,
-        style: const TextStyle(
-          color: AppColors.textSecondary,
-          fontSize: 12,
+    const highlightColor = Color(0xFF1EA69A);
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width:
+            56, // Aumentado também para alinhar e combinar com o tamanho das redes sociais
+        height: 56, // Aumentado para 56
+        decoration: BoxDecoration(
+          color: isHovered ? highlightColor : AppColors.surfaceAlt,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: isHovered ? highlightColor : AppColors.border,
+          ),
+        ),
+        child: IconButton(
+          onPressed: widget.onPressed,
+          icon: Icon(
+            Icons.arrow_upward_rounded,
+            color: isHovered ? Colors.white : AppColors.textPrimary,
+            size: 22, // Ícone ligeiramente maior
+          ),
         ),
       ),
+    );
+  }
+}
+
+class _FlutterBadge extends StatelessWidget {
+  const _FlutterBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text(
+          'Construído com ',
+          style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: const Color(0xFF02569B).withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(
+              color: const Color(0xFF02569B).withValues(alpha: 0.4),
+            ),
+          ),
+          child: const Row(
+            children: [
+              FlutterLogo(size: 14),
+              SizedBox(width: 4),
+              Text(
+                'Flutter',
+                style: TextStyle(
+                  color: Color(0xFF0175C2),
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

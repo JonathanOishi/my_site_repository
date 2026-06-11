@@ -1,141 +1,170 @@
 import 'package:flutter/material.dart';
+import 'package:jonathan_oishi_portfolio/core/responsive/app_spacing.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/responsive.dart';
 import 'package:jonathan_oishi_portfolio/core/theme/app_colors_theme.dart';
 
 class ServicesSection extends StatelessWidget {
-  const ServicesSection({super.key});
+  final VoidCallback onContactPressed;
+
+  const ServicesSection({
+    super.key,
+    required this.onContactPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = Responsive.isMobile(context);
-
-    final cardWidth = Responsive.responsive<double>(
+    final horizontalPadding = Responsive.responsive<double>(
       context: context,
-      mobile: double.infinity,
-      tablet: 340,
-      desktop: 360,
+      mobile: 24,
+      tablet: 48,
+      desktop: 72,
     );
+
+    final maxWidth = Responsive.responsive<double>(
+      context: context,
+      mobile: 720,
+      tablet: 980,
+      desktop: 1240,
+    );
+
+    // Lista com os dados estruturados dos cards de serviço
+    final services = [
+      _ServiceData(
+        icon: Icons.phone_android_rounded,
+        title: 'Desenvolvimento Mobile',
+        description:
+            'Criação de aplicativos nativos e híbridos sob medida de alta performance. Um único código fonte rodando de forma fluida, rápida e responsiva tanto em Android quanto em iOS.',
+        features: [
+          'Flutter & Dart',
+          'Gerenciamento Bloc/Cubit',
+          'APIs & WebSockets',
+          'Banco de dados local',
+          'Integração Firebase',
+          'Publicação nas Lojas',
+        ],
+        buttonText: 'Solicitar Orçamento',
+      ),
+      _ServiceData(
+        icon: Icons.web_rounded,
+        title: 'Desenvolvimento Web',
+        description:
+            'Desenvolvimento de ecossistemas web robustos, desde Landing Pages focadas em conversão até plataformas SaaS complexas com painéis administrativos inteligentes.',
+        features: [
+          'SaaS & Sistemas',
+          'Responsividade Total',
+          'Otimização SEO',
+          'Design UI/UX moderno',
+          'Painéis de Relatórios',
+          'Gateways de Pagamento',
+        ],
+        buttonText: 'Consultar Valores',
+      ),
+      _ServiceData(
+        icon: Icons.architecture_rounded,
+        title: 'Consultoria Técnica',
+        description:
+            'Direcionamento estratégico focado em resolver gargalos. Analiso a estrutura do seu projeto para garantir códigos limpos, escaláveis e uma infraestrutura moderna pronta para crescer.',
+        features: [
+          'Arquitetura Limpa / MVVM',
+          'Princípios SOLID',
+          'Code Review profissional',
+          'Otimização de performance',
+          'Automação CI/CD',
+          'Infraestrutura escalável',
+        ],
+        buttonText: 'Agendar Conversa',
+      ),
+    ];
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: 24,
-        vertical: isMobile ? 80 : 120,
-      ),
       color: AppColors.background,
-      child: Center(
+      child: Align(
+        alignment: Alignment.topCenter,
         child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: Responsive.maxContentWidth(context),
-          ),
-          child: Column(
-            children: [
-              Text(
-                'Solicitar',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: isMobile ? 34 : 54,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
+          constraints: BoxConstraints(maxWidth: maxWidth),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: horizontalPadding,
+              vertical: AppSpacing.xxl,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'SERVIÇOS',
                   style: TextStyle(
-                    fontSize: isMobile ? 34 : 54,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1EA69A),
+                    letterSpacing: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Como posso ajudar o seu negócio',
+                  style: TextStyle(
+                    fontSize: 32,
                     fontWeight: FontWeight.w800,
-                  ),
-                  children: const [
-                    TextSpan(
-                      text: 'Orçamento & ',
-                      style: TextStyle(
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    TextSpan(
-                      text: 'Serviços',
-                      style: TextStyle(
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 700),
-                child: Text(
-                  'Transforme sua ideia em realidade. Solicite um orçamento para seu novo aplicativo, sistema ou solução digital.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: isMobile ? 14 : 16,
-                    height: 1.6,
+                    color: AppColors.textPrimary,
+                    letterSpacing: -0.5,
                   ),
                 ),
-              ),
+                const SizedBox(height: 48),
 
-              const SizedBox(height: 60),
-
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 24,
-                runSpacing: 24,
-                children: [
-                  SizedBox(
-                    width: cardWidth,
-                    child: const ServiceCard(
-                      icon: Icons.psychology,
-                      title: 'Consultoria Técnica',
-                      description:
-                          'Análise de arquitetura, revisão de código e mentoria em melhores práticas.',
-                      features: [
-                        'Arquitetura MVVM',
-                        'Otimização de Código',
-                        'Escalabilidade',
-                      ],
-                      buttonText: 'Agendar Conversa',
-                    ),
+                // Renderização condicional baseada na responsividade (evitando GridView travado no Desktop)
+                Responsive.responsive<Widget>(
+                  context: context,
+                  mobile: Column(
+                    children: services
+                        .map(
+                          (s) => Padding(
+                            padding: const EdgeInsets.only(bottom: 24),
+                            child: _ServiceCard(
+                              data: s,
+                              onPressed: onContactPressed,
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
-
-                  SizedBox(
-                    width: cardWidth,
-                    child: const ServiceCard(
-                      icon: Icons.phone_android,
-                      title: 'Desenvolvimento Mobile\n(Flutter)',
-                      description:
-                          'Apps de alta performance para Android e iOS com código único e design nativo.',
-                      features: [
-                        'Clean Architecture',
-                        'Integração Firebase',
-                        'Publicação nas Lojas',
-                      ],
-                      buttonText: 'Solicitar Orçamento',
-                    ),
+                  tablet: Wrap(
+                    spacing: 24,
+                    runSpacing: 24,
+                    children: services.map((s) {
+                      final screenWidth = MediaQuery.of(context).size.width;
+                      final cardWidth =
+                          (screenWidth - (horizontalPadding * 2) - 24) / 2;
+                      return SizedBox(
+                        width: cardWidth,
+                        child: _ServiceCard(
+                          data: s,
+                          onPressed: onContactPressed,
+                        ),
+                      );
+                    }).toList(),
                   ),
-
-                  SizedBox(
-                    width: cardWidth,
-                    child: const ServiceCard(
-                      icon: Icons.language,
-                      title: 'Desenvolvimento Web (SaaS/Landing)',
-                      description:
-                          'Experiências web modernas, responsivas e otimizadas para conversão.',
-                      features: [
-                        'Design Responsivo',
-                        'SEO & Performance',
-                        'Painel Administrativo',
-                      ],
-                      buttonText: 'Consultar Valores',
-                    ),
+                  desktop: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: services
+                        .map(
+                          (s) => Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                right: s == services.last ? 0 : 24,
+                              ),
+                              child: _ServiceCard(
+                                data: s,
+                                onPressed: onContactPressed,
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -143,130 +172,162 @@ class ServicesSection extends StatelessWidget {
   }
 }
 
-class ServiceCard extends StatelessWidget {
-  const ServiceCard({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.description,
-    required this.features,
-    required this.buttonText,
-  });
-
+// Modelo de dados simples para organizar os serviços
+class _ServiceData {
   final IconData icon;
   final String title;
   final String description;
   final List<String> features;
   final String buttonText;
 
+  const _ServiceData({
+    required this.icon,
+    required this.title,
+    required this.description,
+    required this.features,
+    required this.buttonText,
+  });
+}
+
+class _ServiceCard extends StatefulWidget {
+  final _ServiceData data;
+  final VoidCallback onPressed;
+
+  const _ServiceCard({
+    required this.data,
+    required this.onPressed,
+  });
+
+  @override
+  State<_ServiceCard> createState() => _ServiceCardState();
+}
+
+class _ServiceCardState extends State<_ServiceCard> {
+  bool isHovered = false;
+
   @override
   Widget build(BuildContext context) {
-    final cardHeight = Responsive.responsive<double>(
-      context: context,
-      mobile: 520,
-      tablet: 560,
-      desktop: 560,
-    );
+    const buttonColor = Color(0xFF1EA69A);
 
-    return Container(
-      height: cardHeight,
-      padding: const EdgeInsets.all(32),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceAlt,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: AppColors.primary.withValues(alpha: .12),
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        padding: const EdgeInsets.all(28),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceAlt,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: isHovered
+                ? buttonColor.withValues(alpha: .40)
+                : AppColors.border,
+            width: isHovered ? 1.5 : 1.0,
+          ),
+          boxShadow: isHovered
+              ? [
+                  BoxShadow(
+                    color: buttonColor.withValues(alpha: 0.06),
+                    blurRadius: 24,
+                    offset: const Offset(0, 12),
+                  ),
+                ]
+              : [],
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 72,
-            height: 72,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: .12),
-              borderRadius: BorderRadius.circular(20),
+        // Column configurada com MainAxisSize.min para colapsar o espaço excedente
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: isHovered
+                    ? buttonColor
+                    : buttonColor.withValues(alpha: .10),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(
+                widget.data.icon,
+                color: isHovered ? Colors.white : buttonColor,
+                size: 22,
+              ),
             ),
-            child: Icon(
-              icon,
-              color: AppColors.primary,
-              size: 34,
+            const SizedBox(height: 20),
+            Text(
+              widget.data.title,
+              style: const TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary,
+              ),
             ),
-          ),
-
-          const SizedBox(height: 24),
-
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
+            const SizedBox(height: 12),
+            Text(
+              widget.data.description,
+              style: const TextStyle(
+                fontSize: 13,
+                height: 1.5,
+                color: AppColors.textSecondary,
+              ),
             ),
-          ),
-
-          const SizedBox(height: 16),
-
-          Text(
-            description,
-            style: const TextStyle(
-              fontSize: 15,
-              height: 1.6,
-              color: AppColors.textSecondary,
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: features
-                  .map(
-                    (feature) => Padding(
-                      padding: const EdgeInsets.only(bottom: 14),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.check_circle_outline,
-                            color: AppColors.primary,
-                            size: 18,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              feature,
-                              style: const TextStyle(
-                                color: AppColors.textPrimary,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ],
+            const SizedBox(height: 24),
+            // Mapeamento direto das tags curtas sem Expanded artificial intermediário
+            ...widget.data.features.map((feature) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.check_circle_rounded,
+                      color: buttonColor,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        feature,
+                        style: const TextStyle(
+                          color: AppColors.textPrimary,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  )
-                  .toList(),
-            ),
-          ),
-
-          SizedBox(
-            width: double.infinity,
-            height: 56,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  ],
+                ),
+              );
+            }),
+            const SizedBox(
+              height: 24,
+            ), // Espaçamento fixo aproximando o botão dos checks
+            SizedBox(
+              width: double.infinity,
+              height: 46,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: buttonColor,
+                  foregroundColor: Colors.white,
+                  elevation: isHovered ? 4 : 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: widget.onPressed,
+                child: Text(
+                  widget.data.buttonText,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              onPressed: () {},
-              child: Text(buttonText),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
