@@ -189,7 +189,7 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
 
     if (isMobile) {
       return SizedBox(
-        height: 490,
+        height: 520, // Altura ampliada para dar espaço ao Wrap de tecnologias sem espremer o botão
         child: PageView.builder(
           controller: _pageController,
           itemCount: cards.length,
@@ -213,7 +213,7 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
         crossAxisCount: 3,
         crossAxisSpacing: AppSpacing.md,
         mainAxisSpacing: AppSpacing.md,
-        childAspectRatio: 0.62,
+        childAspectRatio: 0.58, // Proporção ajustada para evitar cortes de texto em telas desktop menores
       ),
       itemBuilder: (context, index) => cards[index],
     );
@@ -297,7 +297,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                     const SizedBox(height: 6),
                     Text(
                       widget.description,
-                      maxLines: 3,
+                      maxLines: 4, // Permite ler mais do texto sem quebras bruscas
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 13,
@@ -306,31 +306,36 @@ class _ProjectCardState extends State<_ProjectCard> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    Wrap(
-                      spacing: 6,
-                      runSpacing: 6,
-                      children: widget.technologies.map((tech) {
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 9,
-                            vertical: 5,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: .12),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            tech,
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.primary,
-                            ),
-                          ),
-                        );
-                      }).toList(),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: const NeverScrollableScrollPhysics(), // Mantém a estrutura rígida e limpa
+                        child: Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: widget.technologies.map((tech) {
+                            return Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 9,
+                                vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withValues(alpha: .12),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                tech,
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 16), // Garante um respiro elegante antes do botão
                     SizedBox(
                       width: double.infinity,
                       height: 40,
