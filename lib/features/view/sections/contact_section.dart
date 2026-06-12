@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/app_spacing.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/responsive.dart';
 import 'package:jonathan_oishi_portfolio/core/theme/app_colors_theme.dart';
-import 'package:url_launcher/url_launcher.dart'; // 1. Importação do url_launcher
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
@@ -94,8 +94,58 @@ class ContactSection extends StatelessWidget {
   }
 }
 
-class _ContactFormCard extends StatelessWidget {
+class _ContactFormCard extends StatefulWidget {
   const _ContactFormCard();
+
+  @override
+  State<_ContactFormCard> createState() => _ContactFormCardState();
+}
+
+class _ContactFormCardState extends State<_ContactFormCard> {
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _messageController = TextEditingController();
+
+  Future<void> _sendToWhatsApp() async {
+    if (_nameController.text.trim().isEmpty ||
+        _emailController.text.trim().isEmpty ||
+        _messageController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Preencha todos os campos'),
+        ),
+      );
+      return;
+    }
+
+    final texto =
+        '''
+        🚀 Nova solicitação pelo portfólio
+
+        👤 Nome: ${_nameController.text}
+        📧 Email: ${_emailController.text}
+
+        💬 Mensagem:
+        ${_messageController.text}
+        ''';
+
+    final uri = Uri.parse(
+      'https://wa.me/5511951402161?text=${Uri.encodeComponent(texto)}',
+    );
+
+    await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _messageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,31 +160,46 @@ class _ContactFormCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Vamos construir algo incrivel?',
+            'Vamos construir algo incrível?',
             style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 18,
               fontWeight: FontWeight.w700,
             ),
           ),
+
           const SizedBox(height: AppSpacing.lg),
+
           const _FieldLabel('SEU NOME'),
-          const _InputPlaceholder(hint: 'Jonathan Oishi'),
-          const SizedBox(height: AppSpacing.md),
-          const _FieldLabel('EMAIL'),
-          const _InputPlaceholder(hint: 'email@exemplo.com'),
-          const SizedBox(height: AppSpacing.md),
-          const _FieldLabel('MENSAGEM'),
-          const _InputPlaceholder(
-            hint: 'Descreva seu projeto ou proposta...',
-            isLongText: true,
+          TextField(
+            controller: _nameController,
+            decoration: _inputDecoration('Nome Completo'),
           ),
+
+          const SizedBox(height: AppSpacing.md),
+
+          const _FieldLabel('EMAIL'),
+          TextField(
+            controller: _emailController,
+            decoration: _inputDecoration('email@exemplo.com'),
+          ),
+
+          const SizedBox(height: AppSpacing.md),
+
+          const _FieldLabel('MENSAGEM'),
+          TextField(
+            controller: _messageController,
+            maxLines: 5,
+            decoration: _inputDecoration('Descreva seu projeto ou proposta...'),
+          ),
+
           const SizedBox(height: AppSpacing.lg),
+
           SizedBox(
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: _sendToWhatsApp,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.textPrimary,
@@ -149,6 +214,29 @@ class _ContactFormCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration(String hint) {
+    return InputDecoration(
+      hintText: hint,
+      filled: true,
+      fillColor: AppColors.input,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: AppColors.border),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: AppColors.border),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+          color: AppColors.primary,
+          width: 2,
+        ),
       ),
     );
   }
@@ -309,41 +397,6 @@ class _FieldLabel extends StatelessWidget {
           color: AppColors.textSecondary,
           fontSize: 10,
           fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
-  }
-}
-
-class _InputPlaceholder extends StatelessWidget {
-  const _InputPlaceholder({
-    required this.hint,
-    this.isLongText = false,
-  });
-
-  final String hint;
-  final bool isLongText;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: isLongText ? 110 : 44,
-      alignment: isLongText ? Alignment.topLeft : Alignment.centerLeft,
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: isLongText ? AppSpacing.md : 0,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.input,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Text(
-        hint,
-        style: const TextStyle(
-          color: AppColors.textSecondary,
-          fontSize: 12,
         ),
       ),
     );

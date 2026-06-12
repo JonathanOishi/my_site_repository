@@ -21,6 +21,6 @@ const List<HomeNavItem> homeNavItems = [
   HomeNavItem(id: HomeSectionIds.experience, label: 'Experiencia'),
   HomeNavItem(id: HomeSectionIds.education, label: 'Formacao'),
   HomeNavItem(id: HomeSectionIds.projects, label: 'Projetos'),
-  HomeNavItem(id: HomeSectionIds.service, label: 'Service'),
+  HomeNavItem(id: HomeSectionIds.service, label: 'Serviços'),
   HomeNavItem(id: HomeSectionIds.contact, label: 'Contato', isPrimary: true),
 ];

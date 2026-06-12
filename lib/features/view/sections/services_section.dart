@@ -35,26 +35,26 @@ class ServicesSection extends StatelessWidget {
             'Criação de aplicativos nativos e híbridos sob medida de alta performance. Um único código fonte rodando de forma fluida, rápida e responsiva tanto em Android quanto em iOS.',
         features: [
           'Flutter & Dart',
-          'Gerenciamento Bloc/Cubit',
-          'APIs & WebSockets',
+          'Gerenciamento Estados',
+          'APIs',
           'Banco de dados local',
-          'Integração Firebase',
+          'Aplicativos Android e IOS',
           'Publicação nas Lojas',
         ],
         buttonText: 'Solicitar Orçamento',
       ),
       _ServiceData(
         icon: Icons.web_rounded,
-        title: 'Desenvolvimento Web',
+        title: 'Landing Pages',
         description:
-            'Desenvolvimento de ecossistemas web robustos, desde Landing Pages focadas em conversão até plataformas SaaS complexas com painéis administrativos inteligentes.',
+            'Criação de Landing Pages profissionais e estratégicas, desenvolvidas para destacar sua marca, captar leads e aumentar conversões. Do jeito solicitado.',
         features: [
-          'SaaS & Sistemas',
+          'Alta Conversão',
           'Responsividade Total',
           'Otimização SEO',
-          'Design UI/UX moderno',
-          'Painéis de Relatórios',
-          'Gateways de Pagamento',
+          'Design UI/UX Moderno',
+          'Integração com WhatsApp',
+          'Captação de Leads',
         ],
         buttonText: 'Consultar Valores',
       ),
@@ -141,23 +141,25 @@ class ServicesSection extends StatelessWidget {
                       );
                     }).toList(),
                   ),
-                  desktop: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: services
-                        .map(
-                          (s) => Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                right: s == services.last ? 0 : 24,
-                              ),
-                              child: _ServiceCard(
-                                data: s,
-                                onPressed: onContactPressed,
+                  desktop: IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: services
+                          .map(
+                            (s) => Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  right: s == services.last ? 0 : 24,
+                                ),
+                                child: _ServiceCard(
+                                  data: s,
+                                  onPressed: onContactPressed,
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                        .toList(),
+                          )
+                          .toList(),
+                    ),
                   ),
                 ),
               ],
@@ -225,7 +227,6 @@ class _ServiceCardState extends State<_ServiceCard> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 250),
@@ -260,6 +261,7 @@ class _ServiceCardState extends State<_ServiceCard> {
             ),
           ),
           const SizedBox(height: 24),
+
           ...widget.data.features.map(
             (feature) => Padding(
               padding: const EdgeInsets.only(bottom: 10),
@@ -285,7 +287,9 @@ class _ServiceCardState extends State<_ServiceCard> {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+
+          const Spacer(),
+
           SizedBox(
             width: double.infinity,
             height: 46,
