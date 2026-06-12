@@ -9,25 +9,25 @@
   <title>Jonathan Oishi | Desenvolvedor Flutter</title>
   <meta name="description" content="Portfólio Jonathan Oishi">
 
-  <!-- Responsividade -->
+  
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
-  <!-- Android -->
+ 
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#0F1413">
 
-  <!-- iOS -->
+
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Jonathan Oishi">
 
-  <!-- Icons -->
+
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
   <link rel="icon" type="image/png" href="favicon.png">
 
-  <!-- Manifest -->
+
   <link rel="manifest" href="manifest.json">
 
   <style>
@@ -36,13 +36,33 @@
       margin: 0;
       padding: 0;
       width: 100%;
-      min-height: 100%;
+      height: 100%;
       background-color: #0F1413;
+
+      overscroll-behavior: none;
+      overflow: hidden;
+    }
+
+  
+    * {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+  
+    flt-glass-pane {
+      touch-action: none !important;
+      pointer-events: all !important;
     }
   </style>
 </head>
 
 <body>
-  <script src="flutter_bootstrap.js" async></script>
+  <!--
+    REMOVIDO o "async" — crítico para iOS PWA.
+    Com async, o WebKit pode inicializar antes do DOM estar pronto,
+    corrompendo o gesture recognizer do Flutter.
+  -->
+  <script src="flutter_bootstrap.js"></script>
 </body>
 </html>
