@@ -3,7 +3,7 @@
   "short_name": "Jonathan Oishi",
   "start_url": "/",
   "scope": "/",
-  "display": "standalone",
+  "display": "browser",
   "background_color": "#0F1413",
   "theme_color": "#0F1413",
   "description": "Portfólio de Jonathan Oishi - Desenvolvedor Flutter",

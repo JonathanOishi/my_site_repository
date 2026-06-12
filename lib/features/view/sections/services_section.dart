@@ -291,9 +291,7 @@ class _ServiceCardState extends State<_ServiceCard> {
               ),
             ),
           ),
-
-          const Spacer(),
-
+          const SizedBox(height: 24),
           SizedBox(
             width: double.infinity,
             height: 46,
