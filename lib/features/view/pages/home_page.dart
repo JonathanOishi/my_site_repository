@@ -66,10 +66,10 @@ class _HomePageState extends State<HomePage> {
       key: _scaffoldKey,
       backgroundColor: AppColors.background,
       resizeToAvoidBottomInset: false,
-      drawer: MobileNavDrawer(
-        items: homeNavItems,
-        onItemTap: _onDrawerItemTap,
-      ),
+      // drawer: MobileNavDrawer(
+      //   items: homeNavItems,
+      //   onItemTap: _onDrawerItemTap,
+      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [

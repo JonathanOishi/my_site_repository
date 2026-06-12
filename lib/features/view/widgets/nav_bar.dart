@@ -42,13 +42,13 @@ class Navbar extends StatelessWidget {
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: onMenuTap,
-                  icon: const Icon(Icons.menu_rounded),
-                  style: IconButton.styleFrom(
-                    foregroundColor: AppColors.textPrimary,
-                  ),
-                ),
+                // IconButton(
+                //   onPressed: onMenuTap,
+                //   icon: const Icon(Icons.menu_rounded),
+                //   style: IconButton.styleFrom(
+                //     foregroundColor: AppColors.textPrimary,
+                //   ),
+                // ),
               ],
             )
           : Center(
