@@ -19,7 +19,9 @@ class HeroSection extends StatelessWidget {
       child: Stack(
         children: [
           const Positioned.fill(
-            child: ParticleBackground(),
+            child: IgnorePointer(
+              child: ParticleBackground(),
+            ),
           ),
           Align(
             alignment: Alignment.center,
