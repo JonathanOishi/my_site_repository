@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:jonathan_oishi_portfolio/core/scroll/custom_scroll_behavior.dart';
+import 'package:jonathan_oishi_portfolio/core/scroll/custom_scroll_behavior.dart';
 import 'package:jonathan_oishi_portfolio/core/theme/app_theme.dart';
 import 'package:jonathan_oishi_portfolio/features/view/pages/home_page.dart';
 
@@ -16,7 +16,7 @@ class JonathanPortifolio extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Jonathan Portfolio',
       theme: AppTheme.darkTheme,
-      // scrollBehavior: MyCustomScrollBehavior(),
+      scrollBehavior: MyCustomScrollBehavior(),
       home: HomePage(),
     );
   }
