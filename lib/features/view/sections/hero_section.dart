@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/app_spacing.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/responsive.dart';
 import 'package:jonathan_oishi_portfolio/core/theme/app_colors_theme.dart';
-// import 'package:jonathan_oishi_portfolio/features/view/widgets/particles/particles_back.dart';
+import 'package:jonathan_oishi_portfolio/features/view/widgets/particles/particles_back.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HeroSection extends StatelessWidget {
@@ -18,11 +18,11 @@ class HeroSection extends StatelessWidget {
       color: AppColors.background,
       child: Stack(
         children: [
-          // const Positioned.fill(
-          //   child: IgnorePointer(
-          //     child: ParticleBackground(),
-          //   ),
-          // ),
+          const Positioned.fill(
+            child: IgnorePointer(
+              child: ParticleBackground(),
+            ),
+          ),
           Align(
             alignment: Alignment.center,
             child: ConstrainedBox(
