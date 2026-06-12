@@ -297,7 +297,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                     const SizedBox(height: 6),
                     Text(
                       widget.description,
-                      maxLines: 5,
+                      maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 13,
@@ -330,7 +330,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                         );
                       }).toList(),
                     ),
-                    const Spacer(),
+                    const SizedBox(height: 12),
                     SizedBox(
                       width: double.infinity,
                       height: 40,
