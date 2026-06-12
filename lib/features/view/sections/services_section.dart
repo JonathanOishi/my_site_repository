@@ -297,24 +297,21 @@ class _ServiceCardState extends State<_ServiceCard> {
           SizedBox(
             width: double.infinity,
             height: 46,
-            child: Material(
-              color: Colors.transparent,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: buttonColor,
-                  foregroundColor: Colors.white,
-                  elevation: isHovered ? 4 : 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: buttonColor,
+                foregroundColor: Colors.white,
+                elevation: isHovered ? 4 : 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                onPressed: widget.onPressed,
-                child: Text(
-                  widget.data.buttonText,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                  ),
+              ),
+              onPressed: widget.onPressed,
+              child: Text(
+                widget.data.buttonText,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
