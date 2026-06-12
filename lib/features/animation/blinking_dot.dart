@@ -14,16 +14,14 @@ class BlinkingDotState extends State<BlinkingDot>
     _controller = AnimationController(
       duration: const Duration(
         milliseconds: 200,
-      ), // Mais rápido! (600 milissegundos)
+      ),
       vsync: this,
-    )..repeat(); // Roda continuamente em ciclo direto
+    )..repeat();
 
-    // Começa exatamente no tamanho da bolinha (1.0) e cresce só um pouco (até 2.0)
     _scaleAnimation = Tween<double>(begin: 1.0, end: 1.5).animate(
       CurvedAnimation(parent: _controller, curve: Curves.linear),
     );
 
-    // Começa bem visível (0.8) e zera a opacidade conforme cresce
     _opacityAnimation = Tween<double>(begin: 0.0, end: 0.8).animate(
       CurvedAnimation(parent: _controller, curve: Curves.linear),
     );
@@ -43,7 +41,6 @@ class BlinkingDotState extends State<BlinkingDot>
         return Stack(
           alignment: Alignment.center,
           children: [
-            // Brilho que expande rápido e some
             Transform.scale(
               scale: _scaleAnimation.value,
               child: Container(
@@ -57,7 +54,7 @@ class BlinkingDotState extends State<BlinkingDot>
                 ),
               ),
             ),
-            // Centro fixo
+
             Container(
               width: widget.size,
               height: widget.size,

@@ -305,7 +305,7 @@ class _ContactInfoCard extends StatelessWidget {
                 width: double.infinity,
                 height: 44,
                 child: ElevatedButton.icon(
-                  onPressed: _launchResumeURL, // Chamada da função aqui
+                  onPressed: _launchResumeURL,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.textPrimary,

@@ -21,7 +21,6 @@ class HeroSection extends StatelessWidget {
           const Positioned.fill(
             child: ParticleBackground(),
           ),
-
           Align(
             alignment: Alignment.center,
             child: ConstrainedBox(
@@ -62,7 +61,6 @@ class HeroSection extends StatelessWidget {
 class _HeroTextContent extends StatelessWidget {
   const _HeroTextContent();
 
-  // Função para abrir o GitHub
   Future<void> _launchGitHub() async {
     final Uri url = Uri.parse('https://github.com/JonathanOishi');
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
@@ -70,7 +68,6 @@ class _HeroTextContent extends StatelessWidget {
     }
   }
 
-  // Função para abrir o LinkedIn
   Future<void> _launchLinkedIn() async {
     final Uri url = Uri.parse('https://www.linkedin.com/in/jonathanoishi/');
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
@@ -98,9 +95,7 @@ class _HeroTextContent extends StatelessWidget {
               letterSpacing: 1.8,
             ),
           ),
-
           const SizedBox(height: AppSpacing.lg),
-
           Text.rich(
             TextSpan(
               style: TextStyle(
@@ -139,20 +134,15 @@ class _HeroTextContent extends StatelessWidget {
               ),
             ),
           ),
-
           const SizedBox(height: AppSpacing.xl),
-
-          // Botões limpos (apenas texto), grandes e responsivos
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Botão do LinkedIn - Totalmente preenchido
               ElevatedButton(
                 onPressed: _launchLinkedIn,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  foregroundColor:
-                      AppColors.background, // Texto escuro para alto contraste
+                  foregroundColor: AppColors.background,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 36,
                     vertical: 22,
@@ -172,8 +162,6 @@ class _HeroTextContent extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16),
-
-              // Botão do GitHub - Estilo Outline (Vazado com Borda)
               OutlinedButton(
                 onPressed: _launchGitHub,
                 style: OutlinedButton.styleFrom(

@@ -1,5 +1,4 @@
 // ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/app_spacing.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/responsive.dart';
@@ -7,7 +6,6 @@ import 'package:jonathan_oishi_portfolio/core/theme/app_colors_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FooterSection extends StatelessWidget {
-  // Callback opcional para acionar o scroll até o topo da página
   final VoidCallback? onScrollToTop;
 
   const FooterSection({
@@ -112,7 +110,6 @@ class FooterSection extends StatelessWidget {
                 const SizedBox(height: 48),
                 const Divider(color: AppColors.border, thickness: 0.8),
                 const SizedBox(height: 24),
-                // Rodapé de créditos e assinatura de tecnologia utilizada
                 Responsive.responsive<Widget>(
                   context: context,
                   mobile: const Column(
@@ -276,11 +273,11 @@ class _SocialImageLinkState extends State<_SocialImageLink> {
           highlightColor: Colors.transparent,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            width: 56, // Aumentado de 48 para 56 para dar mais imponência
-            height: 56, // Aumentado de 48 para 56
+            width: 56,
+            height: 56,
             padding: const EdgeInsets.all(
               14,
-            ), // Padding proporcional para manter o ícone bonito
+            ),
             decoration: BoxDecoration(
               color: isHovered
                   ? highlightColor.withValues(alpha: 0.15)
@@ -323,9 +320,8 @@ class _ScrollToTopButtonState extends State<_ScrollToTopButton> {
       onExit: (_) => setState(() => isHovered = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        width:
-            56, // Aumentado também para alinhar e combinar com o tamanho das redes sociais
-        height: 56, // Aumentado para 56
+        width: 56,
+        height: 56,
         decoration: BoxDecoration(
           color: isHovered ? highlightColor : AppColors.surfaceAlt,
           borderRadius: BorderRadius.circular(14),
@@ -338,7 +334,7 @@ class _ScrollToTopButtonState extends State<_ScrollToTopButton> {
           icon: Icon(
             Icons.arrow_upward_rounded,
             color: isHovered ? Colors.white : AppColors.textPrimary,
-            size: 22, // Ícone ligeiramente maior
+            size: 22,
           ),
         ),
       ),

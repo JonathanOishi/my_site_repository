@@ -7,7 +7,6 @@ class TechGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Mantive sua lista idêntica de categorias
     final categories = [
       {
         'title': 'Desenvolvimento Mobile',
@@ -65,7 +64,6 @@ class TechGrid extends StatelessWidget {
       },
     ];
 
-    // Detectando colunas dinamicamente para o cálculo de largura do Wrap
     final int columns = Responsive.responsive(
       context: context,
       mobile: 1,
@@ -125,13 +123,12 @@ class TechGrid extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 60),
-                
-                // 🛠️ MUDANÇA AQUI: LayoutBuilder + Wrap para perfeito controle de tamanho sem travar altura fixa
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final double spacing = 24.0;
-                    // Calcula a largura exata que cada card deve ter baseado nas colunas desejadas
-                    final double itemWidth = (constraints.maxWidth - (spacing * (columns - 1))) / columns;
+                    final double itemWidth =
+                        (constraints.maxWidth - (spacing * (columns - 1))) /
+                        columns;
 
                     return Wrap(
                       spacing: spacing,
@@ -147,7 +144,7 @@ class TechGrid extends StatelessWidget {
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min, // Faz o card abraçar apenas o conteúdo necessário
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
                                 category['title'] as String,
@@ -161,18 +158,22 @@ class TechGrid extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 24),
-                              // Removido o 'Expanded' daqui, permitindo que a Column cresça naturalmente
+
                               Column(
-                                children: (category['skills'] as List).map(
-                                  (skill) => Padding(
-                                    padding: const EdgeInsets.only(bottom: 16),
-                                    child: _SkillItem(
-                                      icon: skill.$1 as IconData,
-                                      name: skill.$2 as String,
-                                      percentage: skill.$3 as int,
-                                    ),
-                                  ),
-                                ).toList(),
+                                children: (category['skills'] as List)
+                                    .map(
+                                      (skill) => Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 16,
+                                        ),
+                                        child: _SkillItem(
+                                          icon: skill.$1 as IconData,
+                                          name: skill.$2 as String,
+                                          percentage: skill.$3 as int,
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
                               ),
                             ],
                           ),

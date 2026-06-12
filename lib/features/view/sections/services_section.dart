@@ -212,13 +212,15 @@ class _ServiceCardState extends State<_ServiceCard> {
         color: AppColors.surfaceAlt,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: isHovered ? buttonColor.withOpacity(0.40) : AppColors.border,
+          color: isHovered
+              ? buttonColor.withValues(alpha: 0.40)
+              : AppColors.border,
           width: isHovered ? 1.5 : 1.0,
         ),
         boxShadow: isHovered
             ? [
                 BoxShadow(
-                  color: buttonColor.withOpacity(0.06),
+                  color: buttonColor.withValues(alpha: .06),
                   blurRadius: 24,
                   offset: const Offset(0, 12),
                 ),
@@ -233,7 +235,9 @@ class _ServiceCardState extends State<_ServiceCard> {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: isHovered ? buttonColor : buttonColor.withOpacity(0.10),
+              color: isHovered
+                  ? buttonColor
+                  : buttonColor.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Icon(

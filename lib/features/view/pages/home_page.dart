@@ -23,7 +23,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // Dicionário de chaves globais mapeadas para cada seção da sua página única (Single Page)
   late final Map<String, GlobalKey> _sectionKeys = {
     HomeSectionIds.hero: GlobalKey(),
     HomeSectionIds.history: GlobalKey(),
@@ -36,7 +35,6 @@ class _HomePageState extends State<HomePage> {
     HomeSectionIds.footer: GlobalKey(),
   };
 
-  // Função centralizada de Scroll dinâmico com correção de sincronismo de frames
   void _scrollToSection(String id) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final key = _sectionKeys[id];
@@ -45,20 +43,18 @@ class _HomePageState extends State<HomePage> {
       if (context != null) {
         Scrollable.ensureVisible(
           context,
-          alignment:
-              0.0, // Garante que o topo do widget alinhe com o topo da tela
+          alignment: 0.0,
           duration: const Duration(
             milliseconds: 650,
-          ), // Velocidade de transição fluida
-          curve: Curves
-              .easeInOutCubic, // Curva suave de aceleração e desaceleração
+          ),
+          curve: Curves.easeInOutCubic,
         );
       }
     });
   }
 
   void _onDrawerItemTap(String id) {
-    Navigator.of(context).pop(); // Fecha o menu lateral no Mobile
+    Navigator.of(context).pop();
     _scrollToSection(id);
   }
 
@@ -77,55 +73,46 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Preenchimento de segurança da barra superior do sistema operacional
             Container(
               height: systemPadding.top,
               color: AppColors.background,
             ),
-
             // Barra de navegação principal (Menu Superior)
             Navbar(
               items: homeNavItems,
               onItemTap: _scrollToSection,
               onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
             ),
-
             // 1. Seção Principal (Apresentação / Hero)
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.hero],
               child: const HeroSection(),
             ),
-
             // 2. Sobre Mim / História
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.history],
               child: const MyHistory(),
             ),
-
             // 3. Tecnologias / Tech Stack Grid
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.stack],
               child: const TechGrid(),
             ),
-
             // 4. Experiência Profissional
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.experience],
               child: const ExperienceSection(),
             ),
-
             // 5. Educação / Formação Acadêmica
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.education],
               child: const EducationSection(),
             ),
-
             // 6. Projetos Desenvolvidos (MyFinancy, GeoTasks, etc.)
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.projects],
               child: const ProjectsSection(),
             ),
-
             // 7. Orçamentos e Serviços (Cards que direcionam para o contato)
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.service],
@@ -134,13 +121,11 @@ class _HomePageState extends State<HomePage> {
                     _scrollToSection(HomeSectionIds.contact),
               ),
             ),
-
             // 8. Seção de Formulário / Informações de Contato
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.contact],
               child: const ContactSection(),
             ),
-
             // 9. Rodapé Técnico Melhorado (Com link para o topo e logo Flutter)
             KeyedSubtree(
               key: _sectionKeys[HomeSectionIds.footer],
@@ -148,8 +133,6 @@ class _HomePageState extends State<HomePage> {
                 onScrollToTop: () => _scrollToSection(HomeSectionIds.hero),
               ),
             ),
-
-            // Preenchimento de segurança da barra inferior de gestos
             Container(
               height: systemPadding.bottom,
               color: AppColors.background,

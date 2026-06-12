@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/app_spacing.dart';
 import 'package:jonathan_oishi_portfolio/core/responsive/responsive.dart';
 import 'package:jonathan_oishi_portfolio/core/theme/app_colors_theme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProjectsSection extends StatelessWidget {
   const ProjectsSection({super.key});
@@ -119,9 +120,7 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(
-      viewportFraction: 0.88,
-    ); // Ajustado levemente para Mobile ver melhor a pista do próximo card
+    _pageController = PageController(viewportFraction: 0.88);
   }
 
   @override
@@ -136,24 +135,26 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
       _ProjectCard(
         title: 'MyFinancy',
         description:
-            'Aplicativo de controle financeiro pessoal que permite gerenciar receitas, despesas e acompanhar o saldo de forma simples e organizada, com autenticação de usuários e sincronização em nuvem.',
+            'Aplicativo de controle financeiro pessoal desenvolvido em Android nativo. Permite gerenciar receitas e despesas, acompanhar saldo em tempo real e visualizar dados organizados. Projeto completo com foco em arquitetura limpa e persistência de dados.',
         imageLink: 'assets/my_financy.png',
+        githubUrl: 'https://github.com/JonathanOishi/MyFinances',
         technologies: [
           'Kotlin',
           'MVVM',
-          'Firebase',
+          'Firebase Auth',
+          'Firestore',
           'Retrofit',
           'REST API',
-          'FCM',
-          'AdMob',
-          'Material 3',
+          'Material Design 3',
+          'Clean Architecture',
         ],
       ),
       _ProjectCard(
         title: 'GeoTasks',
         description:
-            'Aplicativo de gerenciamento de tarefas desenvolvido em Flutter, permitindo criar, editar, concluir e organizar tarefas com sincronização em tempo real, autenticação de usuários e integração com geolocalização.',
+            'Aplicativo de produtividade desenvolvido em Flutter com foco em organização de tarefas inteligentes. Possui autenticação, sincronização em nuvem e recursos de geolocalização para tarefas baseadas em contexto.',
         imageLink: 'assets/geo_tasks.png',
+        githubUrl: 'https://github.com/JonathanOishi/geo_tasks',
         technologies: [
           'Flutter',
           'Dart',
@@ -162,24 +163,23 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
           'Firebase Auth',
           'Firestore',
           'Geolocator',
+          'REST API',
           'Image Picker',
-          'Slidable',
-          'Dotenv',
         ],
       ),
       _ProjectCard(
-        title: 'Web Site Portifolio',
+        title: 'Web Site Portfólio',
         description:
-            'Portfólio profissional desenvolvido em Flutter Web para apresentar minha trajetória, formação acadêmica, experiência profissional, stack tecnológica e projetos desenvolvidos.',
+            'Portfólio pessoal desenvolvido em Flutter Web para apresentação profissional. Estruturado com design system próprio, responsividade completa e foco em performance e experiência do usuário.',
         imageLink: 'assets/port_web.png',
+        githubUrl: 'https://github.com/JonathanOishi/jonathanoishi.github.io',
         technologies: [
-          'Flutter',
+          'Flutter Web',
           'Dart',
-          'Material Design 3',
-          'Responsive',
-          'Componentização',
-          'Animation',
+          'Material 3',
+          'Responsive Design',
           'Design System',
+          'Animations',
           'GitHub Pages',
         ],
       ),
@@ -188,49 +188,34 @@ class _ProjectsGridState extends State<_ProjectsGrid> {
     final isMobile = Responsive.isMobile(context);
 
     if (isMobile) {
-      return Column(
-        children: [
-          SizedBox(
-            height:
-                490, // Aumentado de 440 para 490 para evitar o corte inferior dos botões e do indicador
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: cards.length,
-              physics: const BouncingScrollPhysics(),
-              padEnds: false,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
-                  child: cards[index],
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 12),
-          const _SwipeIndicator(),
-        ],
+      return SizedBox(
+        height: 490,
+        child: PageView.builder(
+          controller: _pageController,
+          itemCount: cards.length,
+          physics: const BouncingScrollPhysics(),
+          padEnds: false,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
+              child: cards[index],
+            );
+          },
+        ),
       );
     }
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isDesktop = constraints.maxWidth >= 1000;
-
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: cards.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: isDesktop ? 3 : 2,
-            crossAxisSpacing: AppSpacing.md,
-            mainAxisSpacing: AppSpacing.md,
-            childAspectRatio: isDesktop
-                ? 0.64
-                : 0.58, // Ajustado para garantir espaço interno responsivo no desktop/tablet
-          ),
-          itemBuilder: (context, index) => cards[index],
-        );
-      },
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: cards.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: AppSpacing.md,
+        mainAxisSpacing: AppSpacing.md,
+        childAspectRatio: 0.62,
+      ),
+      itemBuilder: (context, index) => cards[index],
     );
   }
 }
@@ -239,12 +224,14 @@ class _ProjectCard extends StatefulWidget {
   final String title;
   final String description;
   final String imageLink;
+  final String githubUrl;
   final List<String> technologies;
 
   const _ProjectCard({
     required this.title,
     required this.description,
     required this.imageLink,
+    required this.githubUrl,
     required this.technologies,
   });
 
@@ -255,6 +242,11 @@ class _ProjectCard extends StatefulWidget {
 class _ProjectCardState extends State<_ProjectCard> {
   bool hover = false;
 
+  Future<void> _openGithub() async {
+    final uri = Uri.parse(widget.githubUrl);
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
@@ -262,7 +254,6 @@ class _ProjectCardState extends State<_ProjectCard> {
       onExit: (_) => setState(() => hover = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOut,
         decoration: BoxDecoration(
           color: AppColors.background,
           borderRadius: BorderRadius.circular(18),
@@ -286,10 +277,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(18),
                 ),
-                child: Image.asset(
-                  widget.imageLink,
-                  fit: BoxFit.cover,
-                ),
+                child: Image.asset(widget.imageLink, fit: BoxFit.cover),
               ),
             ),
             Expanded(
@@ -321,14 +309,14 @@ class _ProjectCardState extends State<_ProjectCard> {
                     Wrap(
                       spacing: 6,
                       runSpacing: 6,
-                      children: widget.technologies.take(8).map((tech) {
+                      children: widget.technologies.map((tech) {
                         return Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 9,
                             vertical: 5,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(.12),
+                            color: AppColors.primary.withValues(alpha: .12),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
@@ -342,92 +330,20 @@ class _ProjectCardState extends State<_ProjectCard> {
                         );
                       }).toList(),
                     ),
-                    const Spacer(), // Garante que o bloco de botões fixe perfeitamente no rodapé do card
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            height: 40,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                textStyle: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              onPressed: () {},
-                              child: const Text("Preview"),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: SizedBox(
-                            height: 40,
-                            child: OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                textStyle: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              onPressed: () {},
-                              child: const Text("Código"),
-                            ),
-                          ),
-                        ),
-                      ],
+                    const Spacer(),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: _openGithub,
+                        child: const Text("Ver no Github"),
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SwipeIndicator extends StatefulWidget {
-  const _SwipeIndicator();
-
-  @override
-  State<_SwipeIndicator> createState() => _SwipeIndicatorState();
-}
-
-class _SwipeIndicatorState extends State<_SwipeIndicator>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _c;
-
-  @override
-  void initState() {
-    super.initState();
-    _c = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 900),
-    )..repeat(reverse: true);
-  }
-
-  @override
-  void dispose() {
-    _c.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _c,
-      child: const Text(
-        "← arraste para ver mais →",
-        style: TextStyle(
-          fontSize: 12,
-          color: Colors.grey,
-          fontWeight: FontWeight.w500,
         ),
       ),
     );
